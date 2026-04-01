@@ -1,12 +1,16 @@
+/* --- Títulos das Seções do Formulário --- */
 .form-group-title {
     font-family: 'Big Shoulders Display', sans-serif;
     font-size: 1.5rem;
     text-transform: uppercase;
-    color: var(--primary);
+    color: var(--gold); /* Mudei para dourado para combinar com os labels */
     margin-bottom: 20px;
     letter-spacing: 1px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
 }
 
+/* --- Grade do Formulário --- */
 .grid-form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -14,26 +18,22 @@
     margin-bottom: 20px;
 }
 
+/* Faz o campo de Nome ocupar duas colunas se houver espaço */
 #Aluno_Nome {
     grid-column: span 2;
 }
 
+/* --- Caixas de Entrada --- */
 .input-box {
     display: flex;
     flex-direction: column;
 }
 
 .input-box label {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.input-box label {
     font-size: 0.85rem;
     margin-bottom: 5px;
-    color: var(--gold); /* Usando o dourado do seu tema */
+    color: var(--gold);
+    text-transform: uppercase;
 }
 
 .input-box input, .input-box select {
@@ -42,9 +42,15 @@
     border: 1px solid #444;
     color: white;
     border-radius: 4px;
+    transition: 0.3s;
 }
 
-/* Estilo do botão para ocupar a largura toda com destaque */
+.input-box input:focus {
+    border-color: var(--gold);
+    outline: none;
+}
+
+/* --- Botão Finalizar --- */
 .btn-salvar {
     background: var(--primary);
     color: white;
