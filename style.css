@@ -9,9 +9,13 @@
 
 .grid-form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Cria colunas automáticas */
+    gap: 15px;
     margin-bottom: 20px;
+}
+
+#Aluno_Nome {
+    grid-column: span 2;
 }
 
 .input-box {
@@ -40,18 +44,20 @@
     outline: none;
 }
 
+/* Estilo do botão para ocupar a largura toda com destaque */
 .btn-salvar {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 15px 40px;
+    padding: 18px;
     font-family: 'Big Shoulders Display', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
     cursor: pointer;
-    margin-top: 30px;
     width: 100%;
+    border-radius: 4px;
     transition: 0.3s;
+    margin-top: 10px;
 }
 
 .btn-salvar:hover {
