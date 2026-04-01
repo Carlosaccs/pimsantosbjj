@@ -205,28 +205,29 @@
         </main>
 
     <script src="biblioteca.js"></script>
-    <script>
-        // Injetar o Logo da Biblioteca
-        carregarLogo('#logo-container');
-
-        // Função para trocar de tela (O Palco)
-        function showSection(sectionId) {
-            // Remove 'active' de todos os itens do menu
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Adiciona 'active' ao item clicado (lógica simplificada)
-            event.currentTarget.classList.add('active');
-
-            // Esconde todas as seções
-            document.querySelectorAll('.section-content').forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Mostra a seção desejada
-            document.getElementById(sectionId).classList.add('active');
-        }
-    </script>
+        
+        <script src="script.js"></script> 
+    
+        <script>
+            // Injetar o Logo da Biblioteca
+            carregarLogo('#logo-container');
+    
+            // Função para trocar de tela (O Palco)
+            function showSection(sectionId) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+    
+                if (event) {
+                    event.currentTarget.classList.add('active');
+                }
+    
+                document.querySelectorAll('.section-content').forEach(section => {
+                    section.classList.remove('active');
+                });
+    
+                document.getElementById(sectionId).classList.add('active');
+            }
+        </script>
 </body>
 </html>
