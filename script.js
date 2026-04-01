@@ -1,5 +1,4 @@
-// SUSTITUA PELO SEU URL DO GOOGLE APPS SCRIPT
-const SCRIPT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_k13hmYHAsfLhVy7DDixDqqXY7qHCg0Yotq2-ZzIoSO0LxPIf9PJDrSC2PUZHWplAfn74tWCzMt3R/pub?output=csv';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPoaXxReHc0gx9SbDE6er3AJtv2wzI87KYQ7w4kxVjZN0tVA7AN_VUyVZXIvyry9b-/exec';
 
 function verificarMaioridade() {
     const dataNasc = document.getElementById('Aluno_Data_Nasc').value;
@@ -26,7 +25,7 @@ function verificarMaioridade() {
 
 // FUNÇÃO DE ENVIO REAL PARA A PLANILHA
 document.getElementById('form-novo-aluno').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Impede o recarregamento da página (aqueles ? na URL)
     
     const btn = e.target.querySelector('button');
     const originalText = btn.innerText;
@@ -38,31 +37,30 @@ document.getElementById('form-novo-aluno').addEventListener('submit', async func
     
     // Montamos a lista na ordem exata das colunas da sua tabela CADASTRO
     const valores = [
-        Date.now(), // ID (Gera um número único baseado no tempo)
+        Date.now(), 
         formData.get('Aluno_Nome'),
         formData.get('Aluno_Data_Nasc'),
         formData.get('Aluno_Genero'),
-        '', // Aluno_CPF (vazio por enquanto)
+        '', 
         formData.get('Aluno_WhatsApp'),
-        new Date().toLocaleDateString('pt-BR'), // Data_Matricula
+        new Date().toLocaleDateString('pt-BR'), 
         formData.get('Aluno_Status'),
-        '', // Aluno_Foto
-        '', // Aluno_Endereco
+        '', 
+        '', 
         formData.get('Aluno_Bairro'),
-        'São Paulo', // Aluno_Cidade
-        '', // Aluno_CEP
+        'São Paulo', 
+        '', 
         formData.get('Responsavel_Nome') || '',
         formData.get('Responsavel_Condição') || '',
         formData.get('Responsavel_CPF') || '',
-        '', // Resp WhatsApp
-        '', // Resp Endereço
-        '', // Resp Bairro
-        '', // Resp Cidade
-        ''  // Resp CEP
+        '', 
+        '', 
+        '', 
+        '', 
+        ''  
     ];
 
     try {
-        // Envia para o motor do Google Sheets
         await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', 
@@ -76,7 +74,7 @@ document.getElementById('form-novo-aluno').addEventListener('submit', async func
         });
 
         alert('Sucesso! O aluno ' + formData.get('Aluno_Nome') + ' foi matriculado.');
-        this.reset(); // Limpa o formulário
+        this.reset(); 
         document.getElementById('secao-responsavel').style.display = 'none';
 
     } catch (error) {
