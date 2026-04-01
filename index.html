@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pim Santos JJ | Sistema de Gestão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800000; /* Grená do seu Logo */
+            --gold: #d4af37;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-light: #e0e0e0;
+            --accent: #333;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            display: flex; /* Para o menu lateral */
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- MENU LATERAL (INDUSTRIAL) --- */
+        nav {
+            width: var(--sidebar-width);
+            background: #000;
+            border-right: 2px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .logo-box {
+            padding: 0 20px 30px;
+            text-align: center;
+        }
+
+        #logo-container svg { width: 100px; height: auto; }
+
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            border-left: 4px solid transparent;
+            transition: 0.2s;
+            color: #888;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--bg-card);
+            color: #fff;
+            border-left-color: var(--primary);
+        }
+
+        /* --- ÁREA PRINCIPAL (O PALCO) --- */
+        main {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .section-content {
+            display: none; /* Esconde todas as seções por padrão */
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-top: 0;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* --- CARDS DE FORMULÁRIO --- */
+        .form-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 900px;
+            border-top: 4px solid var(--primary);
+        }
+
+        /* Responsividade para Mobile */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            nav { width: 100%; height: auto; flex-direction: row; overflow-x: auto; }
+            .logo-box { display: none; }
+            .nav-item { padding: 10px 15px; font-size: 1rem; }
+            main { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-box">
+            <div id="logo-container"></div> <div style="font-family:'Big Shoulders Display'; font-size: 1.5rem; margin-top:10px;">PIM SANTOS JJ</div>
+        </div>
+        
+        <div class="nav-item active" onclick="showSection('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="showSection('cadastro')">Novo Aluno</div>
+        <div class="nav-item" onclick="showSection('financeiro')">Financeiro</div>
+        <div class="nav-item" onclick="showSection('presenca')">Check-in Tatame</div>
+        <div class="nav-item" onclick="showSection('evolucao')">Evolução Técnica</div>
+    </nav>
+
+    <main>
+        
+        <section id="dashboard" class="section-content active">
+            <h2>Visão Geral</h2>
+            <p>Aqui entrarão os gráficos de bairros e total de alunos ativos.</p>
+        </section>
+
+        <section id="cadastro" class="section-content">
+            <h2>Cadastro de Aluno</h2>
+            <div class="form-card">
+                <p>Aqui vamos construir o formulário completo com os campos Aluno_ e Responsavel_.</p>
+            </div>
+        </section>
+
+        <section id="financeiro" class="section-content">
+            <h2>Controle Financeiro</h2>
+            <div class="form-card">
+                <p>Interface para lançar pagamentos e mensalidades.</p>
+            </div>
+        </section>
+
+        </main>
+
+    <script src="biblioteca.js"></script>
+    <script>
+        // Injetar o Logo da Biblioteca
+        carregarLogo('#logo-container');
+
+        // Função para trocar de tela (O Palco)
+        function showSection(sectionId) {
+            // Remove 'active' de todos os itens do menu
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Adiciona 'active' ao item clicado (lógica simplificada)
+            event.currentTarget.classList.add('active');
+
+            // Esconde todas as seções
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Mostra a seção desejada
+            document.getElementById(sectionId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
