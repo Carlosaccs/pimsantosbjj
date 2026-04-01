@@ -1,7 +1,19 @@
+// ================================================================
+// BLOCO 1: CONFIGURAÇÕES GERAIS E VARIÁVEIS GLOBAIS
+// ================================================================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztJh9obvf4K0W4oHDzkGXoobOzYG8Dnts-lSqSYvx2cIyQDRtElddqGlMyF6wET7WY/exec';
+let listaAlunosCache = []; // Guarda os alunos vindos da planilha
 
-                    
+// Ao carregar a página, já busca os alunos e define a data de hoje no check-in
+window.onload = () => {
+    carregarListaAlunos();
+    const campoData = document.getElementById('data-presenca');
+    if(campoData) campoData.valueAsDate = new Date();
+};
 
+// ================================================================
+// BLOCO 2: CADASTRO DE ALUNOS E VALIDAÇÃO DE MAIORIDADE
+// ================================================================
 function verificarMaioridade() {
     const dataNasc = document.getElementById('Aluno_Data_Nasc').value;
     if (!dataNasc) return;
@@ -18,68 +30,61 @@ function verificarMaioridade() {
     const secaoResp = document.getElementById('secao-responsavel');
     if (idade < 18) {
         secaoResp.style.display = 'block';
-        document.getElementById('Responsavel_Nome').required = true;
     } else {
         secaoResp.style.display = 'none';
-        document.getElementById('Responsavel_Nome').required = false;
     }
 }
 
-// FUNÇÃO DE ENVIO REAL PARA A PLANILHA
 document.getElementById('form-novo-aluno').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // 1. VALIDAÇÃO DE SEGURANÇA (MENORES)
     const secaoResponsavel = document.getElementById('secao-responsavel');
     const nomeResp = document.getElementById('Responsavel_Nome');
     const cpfResp = document.getElementById('Responsavel_CPF');
 
-    // Se a seção estiver visível, os campos tornam-se obrigatórios
+    // Validação para menores
     if (secaoResponsavel.style.display !== 'none') {
         if (!nomeResp.value.trim() || !cpfResp.value.trim()) {
             alert("⚠️ ATENÇÃO: Para menores de idade, o Nome e CPF do Responsável são obrigatórios!");
             nomeResp.focus();
-            return; // Interrompe o envio
+            return;
         }
     }
 
-    // 2. PREPARAÇÃO DOS DADOS
     const btn = document.getElementById('btn-submit');
     btn.innerText = "ENVIANDO...";
     btn.disabled = true;
 
     const formData = new FormData(this);
-    
-    // Captura os dados exatamente como estão no formulário (já em MAIÚSCULAS pelo blur)
     const dados = {
         valores: [
-            new Date().toLocaleString('pt-BR'), // Data da Matrícula
-            formData.get('Aluno_Nome'),
-            formData.get('Aluno_Data_Nasc'),
-            formData.get('Aluno_Genero'),
-            "", // Espaço para CPF Aluno (se houver)
-            formData.get('Aluno_WhatsApp'),
-            "ATIVO",
-            "", "", // Foto e Endereço
-            formData.get('Aluno_Bairro'),
-            "SÃO PAULO", // Cidade padrão
-            "", // CEP
-            formData.get('Responsavel_Nome') || "",
-            formData.get('Responsavel_Condição') || "",
-            formData.get('Responsavel_CPF') || ""
+            new Date().toLocaleString('pt-BR'), // A: Data Matrícula
+            formData.get('Aluno_Nome'),         // B: Nome
+            formData.get('Aluno_Data_Nasc'),    // C: Nasc
+            formData.get('Aluno_Genero'),       // D: Gênero
+            "",                                 // E: CPF Aluno
+            formData.get('Aluno_WhatsApp'),     // F: WhatsApp
+            formData.get('Aluno_Status'),       // G: Status
+            "", "",                             // H, I: Foto/Endereço
+            formData.get('Aluno_Bairro'),       // J: Bairro
+            "SÃO PAULO",                        // K: Cidade
+            "",                                 // L: CEP
+            formData.get('Responsavel_Nome') || "", // M: Nome Resp
+            formData.get('Responsavel_Condição') || "", // N: Condição
+            formData.get('Responsavel_CPF') || "",  // O: CPF Resp
+            formData.get('Aluno_Periodo') || "NÃO INFORMADO" // P: Período (Novo!)
         ]
     };
 
-    // 3. ENVIO PARA O GOOGLE SHEETS
     fetch(SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify(dados)
     })
-    .then(res => res.text())
-    .then(txt => {
+    .then(() => {
         alert("Sucesso! O aluno " + formData.get('Aluno_Nome') + " foi matriculado.");
         this.reset();
-        secaoResponsavel.style.display = 'none'; // Esconde a seção após limpar
+        secaoResponsavel.style.display = 'none';
+        carregarListaAlunos(); // Atualiza a lista interna
     })
     .catch(err => alert("Erro ao salvar: " + err))
     .finally(() => {
@@ -88,44 +93,103 @@ document.getElementById('form-novo-aluno').addEventListener('submit', function(e
     });
 });
 
+// ================================================================
+// BLOCO 3: CHECK-IN TATAME (BUSCA E TABELA POR PERÍODO)
+// ================================================================
 
-// --- PADRONIZAÇÃO E MÁSCARAS ---
+function carregarListaAlunos() {
+    // Chamada GET para a planilha
+    fetch(SCRIPT_URL + "?action=getAlunos")
+        .then(res => res.json())
+        .then(data => {
+            listaAlunosCache = data;
+            renderizarTabelaPresenca();
+        })
+        .catch(err => console.error("Erro ao carregar alunos:", err));
+}
 
-// 1. Transformar tudo em Maiúsculas ao sair do campo
+function renderizarTabelaPresenca() {
+    const periodoSel = document.getElementById('filtro-periodo').value;
+    const listaContainer = document.getElementById('corpo-tabela-presenca');
+    const buscaNome = document.getElementById('busca-aluno').value.toUpperCase();
+    
+    if (!listaContainer) return;
+    listaContainer.innerHTML = "";
+
+    // Filtra por período E por nome (busca simultânea)
+    const filtrados = listaAlunosCache.filter(aluno => {
+        const matchesPeriodo = (periodoSel === "TODOS" || aluno.periodo === periodoSel);
+        const matchesNome = aluno.nome.includes(buscaNome);
+        return matchesPeriodo && matchesNome;
+    });
+
+    filtrados.forEach(aluno => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = "1px solid #444";
+        tr.innerHTML = `
+            <td style="padding: 12px;"><strong>${aluno.nome}</strong></td>
+            <td style="padding: 12px; font-size: 0.8rem; color: #aaa;">${aluno.periodo}</td>
+            <td style="padding: 12px; text-align: center;">
+                <button onclick="registrarPresenca('${aluno.nome}')" style="background: var(--primary); color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;">CONFIRMAR</button>
+            </td>
+        `;
+        listaContainer.appendChild(tr);
+    });
+}
+
+function registrarPresenca(nomeAluno) {
+    const dataTreino = document.getElementById('data-presenca').value;
+    const btn = event.target;
+    btn.innerText = "OK!";
+    btn.style.background = "#28a745";
+    btn.disabled = true;
+
+    const dadosPresenca = {
+        valores: [
+            new Date().toLocaleString('pt-BR'), // Data/Hora Registro
+            nomeAluno,                         // Nome do Aluno
+            dataTreino                         // Data do Treino selecionada
+        ]
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(dadosPresenca)
+    })
+    .then(() => console.log("Presença registrada para: " + nomeAluno))
+    .catch(err => alert("Erro ao registrar presença: " + err));
+}
+
+// ================================================================
+// BLOCO 4: MÁSCARAS E PADRONIZAÇÃO VISUAL
+// ================================================================
+
+// Transformar em Maiúsculas
 document.querySelectorAll('input[type="text"]').forEach(input => {
     input.addEventListener('blur', function() {
         this.value = this.value.toUpperCase();
     });
 });
 
-// 2. Máscara de WhatsApp (00) 00000-0000
+// Máscara WhatsApp
 const campoWhatsApp = document.querySelector('input[name="Aluno_WhatsApp"]');
+if (campoWhatsApp) {
+    campoWhatsApp.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+        if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        else if (v.length > 0) v = v.replace(/^(\d{0,2})/, '($1');
+        e.target.value = v;
+    });
+}
 
-campoWhatsApp.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-    
-    if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-
-    // Aplica a formatação visual
-    if (value.length > 10) {
-        value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-    } else if (value.length > 6) {
-        value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-    } else if (value.length > 2) {
-        value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
-    } else if (value.length > 0) {
-        value = value.replace(/^(\d{0,2}).*/, '($1');
-    }
-    
-    e.target.value = value;
-});
-
-// 3. Máscara de CPF (Opcional, para os campos de Responsável)
+// Máscara CPF
 const campoCPF = document.querySelector('input[name="Responsavel_CPF"]');
 if (campoCPF) {
     campoCPF.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-        e.target.value = value.slice(0, 14);
+        let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+        v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        e.target.value = v;
     });
 }
