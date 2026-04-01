@@ -1,4 +1,5 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPoaXxReHc0gx9SbDE6er3AJtv2wzI87KYQ7w4kxVjZN0tVA7AN_VUyVZXIvyry9b-/exec';
+                    
 
 function verificarMaioridade() {
     const dataNasc = document.getElementById('Aluno_Data_Nasc').value;
