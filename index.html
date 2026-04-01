@@ -72,29 +72,50 @@
 
         <section id="presenca" class="section-content">
             <h2>Check-in Tatame "Bloco 5"</h2>
+            
             <div class="form-card">
                 <div class="grid-form">
                     <div class="input-box">
-                        <label>Filtrar Modalidade</label>
-                        <select id="filtro-modalidade" onchange="renderizarTabelaPresenca()">
-                            <option value="TODOS">TODOS</option>
-                            <option value="JIU-JITSU">JIU-JITSU</option>
-                        </select>
+                        <label>Modalidade</label>
+                        <select id="filtro-modalidade" onchange="atualizarListaPresenca()">
+                            <option value="">Selecione...</option>
+                            </select>
                     </div>
                     <div class="input-box">
-                        <label>Data</label>
-                        <input type="date" id="data-presenca" onchange="renderizarTabelaPresenca()">
+                        <label>Período</label>
+                        <select id="filtro-periodo" onchange="atualizarListaPresenca()">
+                            <option value="">Selecione...</option>
+                            </select>
                     </div>
                 </div>
+        
+                <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+        
+                <div class="input-box">
+                    <label>Incluir Aluno de outro horário/arte (Busca)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="busca-aluno-extra" placeholder="Digitar nome do aluno...">
+                        <button onclick="incluirAlunoExtra()" style="width: 100px;" class="btn-salvar">+</button>
+                    </div>
+                </div>
+        
                 <div class="table-container">
                     <table>
-                        <thead><tr><th>ALUNO</th><th>PRESENÇA</th></tr></thead>
-                        <tbody id="corpo-tabela-presenca"></tbody>
+                        <thead>
+                            <tr>
+                                <th>ALUNO</th>
+                                <th style="text-align: center;">PRESENÇA</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-tabela-presenca">
+                            </tbody>
                     </table>
                 </div>
+                
+                <button class="btn-salvar" style="margin-top: 20px;" onclick="salvarChamadaDia()">Finalizar Chamada</button>
             </div>
         </section>
-
+        
     </main>
 
     <script src="biblioteca.js"></script>
