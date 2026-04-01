@@ -233,16 +233,37 @@
         <section id="presenca" class="section-content">
             <h2>Check-in Tatame</h2>
             <div class="form-card">
-                <div class="form-group-title">Registrar Presença</div>
+                <div class="form-group-title">Lista de Presença</div>
+                
                 <div class="grid-form">
-                    <div class="input-box" style="grid-column: span 2;">
-                        <label>Buscar Aluno (Digite o nome para filtrar)</label>
-                        <input type="text" id="busca-aluno" placeholder="Digite pelo menos 3 letras..." oninput="filtrarAlunos()">
+                    <div class="input-box">
+                        <label>Filtrar Período</label>
+                        <select id="filtro-periodo" onchange="renderizarTabelaPresenca()">
+                            <option value="TODOS">TODOS OS PERÍODOS</option>
+                            <option value="MANHÃ">MANHÃ</option>
+                            <option value="TARDE">TARDE</option>
+                            <option value="NOITE">NOITE</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Data do Treino</label>
+                        <input type="date" id="data-presenca" onchange="renderizarTabelaPresenca()">
                     </div>
                 </div>
-                
-                <div id="lista-busca-alunos" style="margin-top: 20px; display: grid; gap: 10px;">
-                    </div>
+        
+                <div style="overflow-x: auto; margin-top: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #2a2a2a;">
+                        <thead>
+                            <tr style="background: #000; color: var(--gold); text-align: left;">
+                                <th style="padding: 12px; border-bottom: 2px solid var(--primary);">ALUNO</th>
+                                <th style="padding: 12px; border-bottom: 2px solid var(--primary);">PERÍODO</th>
+                                <th style="padding: 12px; border-bottom: 2px solid var(--primary); text-align: center;">PRESENÇA</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-tabela-presenca">
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </section>
         
