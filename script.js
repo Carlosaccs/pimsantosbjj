@@ -25,66 +25,66 @@ function verificarMaioridade() {
 }
 
 // FUNÇÃO DE ENVIO REAL PARA A PLANILHA
-document.getElementById('form-novo-aluno').addEventListener('submit', async function(e) {
-    e.preventDefault(); // Impede o recarregamento da página (aqueles ? na URL)
-    
-    const btn = e.target.querySelector('button');
-    const originalText = btn.innerText;
+document.getElementById('form-novo-aluno').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // 1. VALIDAÇÃO DE SEGURANÇA (MENORES)
+    const secaoResponsavel = document.getElementById('secao-responsavel');
+    const nomeResp = document.getElementById('Responsavel_Nome');
+    const cpfResp = document.getElementById('Responsavel_CPF');
+
+    // Se a seção estiver visível, os campos tornam-se obrigatórios
+    if (secaoResponsavel.style.display !== 'none') {
+        if (!nomeResp.value.trim() || !cpfResp.value.trim()) {
+            alert("⚠️ ATENÇÃO: Para menores de idade, o Nome e CPF do Responsável são obrigatórios!");
+            nomeResp.focus();
+            return; // Interrompe o envio
+        }
+    }
+
+    // 2. PREPARAÇÃO DOS DADOS
+    const btn = document.getElementById('btn-submit');
     btn.innerText = "ENVIANDO...";
     btn.disabled = true;
 
-    // Captura os dados do formulário
     const formData = new FormData(this);
     
-    // Montamos a lista na ordem exata das colunas da sua tabela CADASTRO
-    const valores = [
-        Date.now(), 
-        formData.get('Aluno_Nome'),
-        formData.get('Aluno_Data_Nasc'),
-        formData.get('Aluno_Genero'),
-        '', 
-        formData.get('Aluno_WhatsApp'),
-        new Date().toLocaleDateString('pt-BR'), 
-        formData.get('Aluno_Status'),
-        '', 
-        '', 
-        formData.get('Aluno_Bairro'),
-        'São Paulo', 
-        '', 
-        formData.get('Responsavel_Nome') || '',
-        formData.get('Responsavel_Condição') || '',
-        formData.get('Responsavel_CPF') || '',
-        '', 
-        '', 
-        '', 
-        '', 
-        ''  
-    ];
+    // Captura os dados exatamente como estão no formulário (já em MAIÚSCULAS pelo blur)
+    const dados = {
+        valores: [
+            new Date().toLocaleString('pt-BR'), // Data da Matrícula
+            formData.get('Aluno_Nome'),
+            formData.get('Aluno_Data_Nasc'),
+            formData.get('Aluno_Genero'),
+            "", // Espaço para CPF Aluno (se houver)
+            formData.get('Aluno_WhatsApp'),
+            "ATIVO",
+            "", "", // Foto e Endereço
+            formData.get('Aluno_Bairro'),
+            "SÃO PAULO", // Cidade padrão
+            "", // CEP
+            formData.get('Responsavel_Nome') || "",
+            formData.get('Responsavel_Condição') || "",
+            formData.get('Responsavel_CPF') || ""
+        ]
+    };
 
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', 
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                aba: "CADASTRO",
-                acao: "inserir",
-                valores: valores
-            })
-        });
-
-        alert('Sucesso! O aluno ' + formData.get('Aluno_Nome') + ' foi matriculado.');
-        this.reset(); 
-        document.getElementById('secao-responsavel').style.display = 'none';
-
-    } catch (error) {
-        console.error('Erro ao salvar:', error);
-        alert('Ops! Algo deu errado ao salvar na planilha.');
-    } finally {
-        btn.innerText = originalText;
+    // 3. ENVIO PARA O GOOGLE SHEETS
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(dados)
+    })
+    .then(res => res.text())
+    .then(txt => {
+        alert("Sucesso! O aluno " + formData.get('Aluno_Nome') + " foi matriculado.");
+        this.reset();
+        secaoResponsavel.style.display = 'none'; // Esconde a seção após limpar
+    })
+    .catch(err => alert("Erro ao salvar: " + err))
+    .finally(() => {
+        btn.innerText = "FINALIZAR MATRÍCULA";
         btn.disabled = false;
-    }
+    });
 });
 
 
