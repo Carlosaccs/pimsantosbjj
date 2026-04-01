@@ -7,139 +7,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #800000; 
-            --gold: #d4af37;
-            --bg-dark: #121212;
-            --bg-card: #1e1e1e;
-            --text-light: #e0e0e0;
-            --accent: #333;
+            --primary: #800000; --gold: #d4af37; --bg-dark: #121212;
+            --bg-card: #1e1e1e; --text-light: #e0e0e0; --accent: #333;
             --sidebar-width: 260px;
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- MENU LATERAL --- */
-        nav {
-            width: var(--sidebar-width);
-            background: #000;
-            border-right: 2px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
-            transition: all 0.3s;
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        nav { width: var(--sidebar-width); background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 20px 0; }
         .logo-box { padding: 0 20px 30px; text-align: center; }
-        #logo-container svg { width: 100px; height: auto; }
-
-        .nav-item {
-            padding: 15px 25px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-family: 'Big Shoulders Display', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            border-left: 4px solid transparent;
-            transition: 0.2s;
-            color: #888;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: var(--bg-card);
-            color: #fff;
-            border-left-color: var(--primary);
-        }
-
-        /* --- ÁREA PRINCIPAL --- */
-        main {
-            flex-grow: 1;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
+        .nav-item { padding: 15px 25px; cursor: pointer; text-transform: uppercase; font-family: 'Big Shoulders Display', sans-serif; font-size: 1.3rem; border-left: 4px solid transparent; color: #888; transition: 0.2s; }
+        .nav-item.active { background: var(--bg-card); color: #fff; border-left-color: var(--primary); }
+        main { flex-grow: 1; padding: 40px; overflow-y: auto; }
         .section-content { display: none; animation: fadeIn 0.4s ease-out; }
         .section-content.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            font-family: 'Big Shoulders Display', sans-serif;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-
-        /* --- ORGANIZAÇÃO DO FORMULÁRIO (GRID) --- */
-        .form-card {
-            background: var(--bg-card);
-            padding: 30px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 900px;
-            border-top: 4px solid var(--primary);
-        }
-
-        .grid-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .input-box { display: flex; flex-direction: column; }
-        .input-box label { font-size: 0.9rem; color: var(--gold); margin-bottom: 5px; }
-        
-        .input-box input, .input-box select {
-            padding: 10px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 4px;
-        }
-
-        .form-group-title {
-            font-family: 'Big Shoulders Display', sans-serif;
-            font-size: 1.5rem;
-            color: #ccc;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        .btn-salvar {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-family: 'Big Shoulders Display', sans-serif;
-            font-size: 1.2rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .form-card { background: var(--bg-card); padding: 30px; border-radius: 4px; border-top: 4px solid var(--primary); max-width: 950px; }
+        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .input-box { display: flex; flex-direction: column; margin-bottom: 15px; }
+        .input-box label { font-size: 0.85rem; color: var(--gold); margin-bottom: 5px; }
+        .input-box input, .input-box select { padding: 10px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 4px; }
+        .form-group-title { font-family: 'Big Shoulders Display', sans-serif; font-size: 1.5rem; color: #ccc; margin: 20px 0 10px; border-bottom: 1px solid #333; }
+        .btn-salvar { background: var(--primary); color: white; border: none; padding: 15px; font-family: 'Big Shoulders Display', sans-serif; font-size: 1.2rem; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-salvar:hover { background: #a00000; }
-
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            nav { width: 100%; height: auto; flex-direction: row; overflow-x: auto; }
-            .logo-box { display: none; }
-            main { padding: 20px; }
-        }
+        .table-container { max-height: 450px; overflow-y: auto; margin-top: 20px; border: 1px solid #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th { position: sticky; top: 0; background: #000; color: var(--gold); padding: 12px; text-align: left; z-index: 10; }
+        td { padding: 12px; border-bottom: 1px solid #333; }
+        @media (max-width: 768px) { body { flex-direction: column; } nav { width: 100%; flex-direction: row; height: auto; } .logo-box { display: none; } }
     </style>
 </head>
 <body>
@@ -151,141 +44,113 @@
         </div>
         <div class="nav-item active" onclick="showSection('dashboard')">Dashboard</div>
         <div class="nav-item" onclick="showSection('cadastro')">Novo Aluno</div>
-        <div class="nav-item" onclick="showSection('financeiro')">Financeiro</div>
         <div class="nav-item" onclick="showSection('presenca')">Check-in Tatame</div>
-        <div class="nav-item" onclick="showSection('evolucao')">Evolução Técnica</div>
+        <div class="nav-item" onclick="showSection('financeiro')">Financeiro</div>
     </nav>
 
     <main>
         <section id="dashboard" class="section-content active">
             <h2>Visão Geral</h2>
-            <p>Aqui entrarão os gráficos de bairros e total de alunos ativos.</p>
+            <div class="form-card"><p>Estatísticas e gráficos aparecerão aqui.</p></div>
         </section>
 
         <section id="cadastro" class="section-content">
-            <h2>Cadastro de Novo Aluno</h2>
+            <h2>Matrícula de Aluno</h2>
             <div class="form-card">
                 <form id="form-novo-aluno">
-                    <div class="form-group-title">Dados do Aluno</div>
+                    <div class="form-group-title">Dados Pessoais</div>
+                    <div class="grid-form">
+                        <div class="input-box"><label>Nome Completo</label><input type="text" name="Aluno_Nome" required placeholder="Ex: Carlos Silva"></div>
+                        <div class="input-box"><label>Data de Nascimento</label><input type="date" id="Aluno_Data_Nasc" name="Aluno_Data_Nasc" required onchange="verificarMaioridade()"></div>
+                        <div class="input-box"><label>Gênero</label><select name="Aluno_Genero"><option value="MASCULINO">MASCULINO</option><option value="FEMININO">FEMININO</option></select></div>
+                        <div class="input-box"><label>WhatsApp</label><input type="text" name="Aluno_WhatsApp" placeholder="(00) 00000-0000"></div>
+                        <div class="input-box"><label>Bairro</label><input type="text" name="Aluno_Bairro"></div>
+                        <div class="input-box"><label>Status</label><select name="Aluno_Status"><option value="ATIVO">ATIVO</option><option value="INATIVO">INATIVO</option></select></div>
+                    </div>
+
+                    <div class="form-group-title">Modalidade e Treino</div>
                     <div class="grid-form">
                         <div class="input-box">
-                            <label>Nome Completo</label>
-                            <input type="text" name="Aluno_Nome" required placeholder="Ex: Carlos Silva">
-                        </div>
-                        <div class="input-box">
-                            <label>Data de Nascimento</label>
-                            <input type="date" id="Aluno_Data_Nasc" name="Aluno_Data_Nasc" required onchange="verificarMaioridade()">
-                        </div>
-                        <div class="input-box">
-                            <label>Gênero</label>
-                            <select name="Aluno_Genero">
-                                <option value="MASCULINO">MASCULINO</option>
-                                <option value="FEMININO">FEMININO</option>
+                            <label>Artes Marciais</label>
+                            <select name="Aluno_Modalidade">
+                                <option value="JIU-JITSU">JIU-JITSU</option>
+                                <option value="JUDÔ">JUDÔ</option>
+                                <option value="MUAY THAI">MUAY THAI</option>
                             </select>
                         </div>
                         <div class="input-box">
-                            <label>WhatsApp</label>
-                            <input type="text" name="Aluno_WhatsApp" placeholder="(00) 00000-0000">
-                        </div>
-                        <div class="input-box">
-                            <label>Bairro</label>
-                            <input type="text" name="Aluno_Bairro">
-                        </div>
-                        <div class="input-box">
-                            <label>Status</label>
-                            <select name="Aluno_Status">
-                                <option value="ATIVO">ATIVO</option>
-                                <option value="INATIVO">INATIVO</option>
+                            <label>Período Base</label>
+                            <select name="Aluno_Periodo">
+                                <option value="MANHÃ">MANHÃ</option>
+                                <option value="TARDE">TARDE</option>
+                                <option value="NOITE">NOITE</option>
+                                <option value="SÁBADO">SÁBADO</option>
                             </select>
                         </div>
                     </div>
 
-                    <div id="secao-responsavel" style="display: none; margin-top: 20px;">
-                        <div class="form-group-title" style="color: var(--gold);">Dados do Responsável (Menor de Idade)</div>
+                    <div id="secao-responsavel" style="display: none;">
+                        <div class="form-group-title" style="color: var(--gold);">Dados do Responsável</div>
                         <div class="grid-form">
-                            <div class="input-box">
-                                <label>Nome do Responsável</label>
-                                <input type="text" id="Responsavel_Nome" name="Responsavel_Nome">
-                            </div>
-                            <div class="input-box">
-                                <label>Parentesco/Condição</label>
-                                <input type="text" id="Responsavel_Condicao" name="Responsavel_Condição" placeholder="Ex: Pai, Mãe, Tutor">
-                            </div>
-                            <div class="input-box">
-                                <label>CPF do Responsável</label>
-                                <input type="text" id="Responsavel_CPF" name="Responsavel_CPF">
-                            </div>
+                            <div class="input-box"><label>Nome do Responsável</label><input type="text" id="Responsavel_Nome" name="Responsavel_Nome"></div>
+                            <div class="input-box"><label>Parentesco/Condição</label><input type="text" name="Responsavel_Condição" placeholder="Ex: Pai, Mãe"></div>
+                            <div class="input-box"><label>CPF do Responsável</label><input type="text" id="Responsavel_CPF" name="Responsavel_CPF"></div>
                         </div>
                     </div>
-
                     <button type="submit" class="btn-salvar" id="btn-submit">Finalizar Matrícula</button>
                 </form>
             </div>
         </section>
 
-        <section id="financeiro" class="section-content">
-            <h2>Gestão Financeira</h2>
-            <div class="form-card">
-                <p>Área em desenvolvimento: Aqui você poderá controlar mensalidades e pagamentos.</p>
-            </div>
-        </section>
-        
         <section id="presenca" class="section-content">
             <h2>Check-in Tatame</h2>
             <div class="form-card">
-                <div class="form-group-title">Lista de Presença</div>
-                
+                <div class="form-group-title">Filtrar Chamada</div>
                 <div class="grid-form">
                     <div class="input-box">
                         <label>Modalidade</label>
-                        <select name="Aluno_Modalidade">
+                        <select id="filtro-modalidade" onchange="renderizarTabelaPresenca()">
+                            <option value="TODOS">TODAS AS ARTES</option>
                             <option value="JIU-JITSU">JIU-JITSU</option>
                             <option value="JUDÔ">JUDÔ</option>
                             <option value="MUAY THAI">MUAY THAI</option>
-                            <option value="OUTRA">OUTRA</option>
                         </select>
                     </div>
                     <div class="input-box">
                         <label>Período</label>
-                        <select name="Aluno_Periodo">
+                        <select id="filtro-periodo" onchange="renderizarTabelaPresenca()">
+                            <option value="TODOS">TODOS OS PERÍODOS</option>
                             <option value="MANHÃ">MANHÃ</option>
                             <option value="TARDE">TARDE</option>
                             <option value="NOITE">NOITE</option>
-                            <option value="SÁBADO">SÁBADO</option>
                         </select>
                     </div>
                     <div class="input-box">
-                        <label>Data do Treino</label>
+                        <label>Data da Aula</label>
                         <input type="date" id="data-presenca" onchange="renderizarTabelaPresenca()">
                     </div>
                 </div>
-        
-                <div style="overflow-x: auto; margin-top: 20px;">
-                    <table style="width: 100%; border-collapse: collapse; background: #2a2a2a;">
+
+                <div class="table-container">
+                    <table>
                         <thead>
-                            <tr style="background: #000; color: var(--gold); text-align: left;">
-                                <th style="padding: 12px; border-bottom: 2px solid var(--primary);">ALUNO</th>
-                                <th style="padding: 12px; border-bottom: 2px solid var(--primary);">PERÍODO</th>
-                                <th style="padding: 12px; border-bottom: 2px solid var(--primary); text-align: center;">PRESENÇA</th>
+                            <tr>
+                                <th>ALUNO</th>
+                                <th>DETALHES</th>
+                                <th style="text-align: center;">PRESENÇA</th>
                             </tr>
                         </thead>
-                        <tbody id="corpo-tabela-presenca">
-                            </tbody>
+                        <tbody id="corpo-tabela-presenca"></tbody>
                     </table>
                 </div>
             </div>
         </section>
-        
-        <section id="evolucao" class="section-content">
-            <h2>Evolução Técnica</h2>
-            <div class="form-card">
-                <p>Área em desenvolvimento: Controle de graduação e frequência por faixa.</p>
-            </div>
+
+        <section id="financeiro" class="section-content">
+            <h2>Financeiro</h2>
+            <div class="form-card"><p>Área em desenvolvimento.</p></div>
         </section>
-
-        
-
-        </main>
+    </main>
 
     <script src="biblioteca.js"></script>
     <script src="script.js"></script> 
