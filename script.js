@@ -1,4 +1,5 @@
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPoaXxReHc0gx9SbDE6er3AJtv2wzI87KYQ7w4kxVjZN0tVA7AN_VUyVZXIvyry9b-/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztJh9obvf4K0W4oHDzkGXoobOzYG8Dnts-lSqSYvx2cIyQDRtElddqGlMyF6wET7WY/exec';
+
                     
 
 function verificarMaioridade() {
