@@ -86,3 +86,45 @@ document.getElementById('form-novo-aluno').addEventListener('submit', async func
         btn.disabled = false;
     }
 });
+
+
+// --- PADRONIZAÇÃO E MÁSCARAS ---
+
+// 1. Transformar tudo em Maiúsculas ao sair do campo
+document.querySelectorAll('input[type="text"]').forEach(input => {
+    input.addEventListener('blur', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
+
+// 2. Máscara de WhatsApp (00) 00000-0000
+const campoWhatsApp = document.querySelector('input[name="Aluno_WhatsApp"]');
+
+campoWhatsApp.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+    
+    if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+    // Aplica a formatação visual
+    if (value.length > 10) {
+        value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+    } else if (value.length > 6) {
+        value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    } else if (value.length > 2) {
+        value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+    } else if (value.length > 0) {
+        value = value.replace(/^(\d{0,2}).*/, '($1');
+    }
+    
+    e.target.value = value;
+});
+
+// 3. Máscara de CPF (Opcional, para os campos de Responsável)
+const campoCPF = document.querySelector('input[name="Responsavel_CPF"]');
+if (campoCPF) {
+    campoCPF.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        e.target.value = value.slice(0, 14);
+    });
+}
