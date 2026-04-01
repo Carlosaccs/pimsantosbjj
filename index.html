@@ -174,20 +174,35 @@
         
                     <div id="secao-responsavel" style="display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
                         <div class="form-group-title" style="color: var(--gold);">Dados do Responsável (Menor de Idade)</div>
+                       
+                        
                         <div class="grid-form">
                             <div class="input-box">
-                                <label>Nome do Responsável</label>
-                                <input type="text" id="Responsavel_Nome" name="Responsavel_Nome">
+                                <label>Nome Completo</label>
+                                <input type="text" id="Aluno_Nome" name="Aluno_Nome" required>
                             </div>
-                            <div class="input-box">
-                                <label>CPF do Responsável</label>
-                                <input type="text" id="Responsavel_CPF" name="Responsavel_CPF">
                             </div>
-                            <div class="input-box">
-                                <label>Parentesco/Condição</label>
-                                <input type="text" id="Responsavel_Condicao" name="Responsavel_Condição" placeholder="Ex: Pai, Mãe, Tutor">
+                        
+                        <div id="secao-responsavel" style="display: none;">
+                            <div class="grid-form">
+                                <div class="input-box">
+                                    <label>Nome do Responsável</label>
+                                    <input type="text" id="Responsavel_Nome" name="Responsavel_Nome">
+                                </div>
+                                
+                                <div class="input-box">
+                                    <label>Parentesco/Condição</label>
+                                    <input type="text" id="Responsavel_Condicao" name="Responsavel_Condição" placeholder="Ex: Pai, Mãe, Tutor">
+                                </div>
+                        
+                                <div class="input-box">
+                                    <label>CPF do Responsável</label>
+                                    <input type="text" id="Responsavel_CPF" name="Responsavel_CPF">
+                                </div>
                             </div>
                         </div>
+
+                        
                     </div>
         
                     <button type="submit" class="btn-salvar">Finalizar Matrícula</button>
