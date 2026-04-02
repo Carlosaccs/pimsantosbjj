@@ -15,15 +15,12 @@
         .section-content { display: none; }
         .section-content.active { display: block; }
         .form-card { background: var(--bg-card); padding: 30px; border-radius: 4px; border-top: 4px solid var(--primary); max-width: 900px; }
-        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .input-box { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .input-box label { font-size: 0.85rem; color: var(--gold); margin-bottom: 5px; }
-        .input-box input, .input-box select { padding: 10px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 4px; }
-        .btn-salvar { background: var(--primary); color: white; border: none; padding: 15px; cursor: pointer; width: 100%; font-family: 'Big Shoulders Display'; font-size: 1.2rem; }
-        .table-container { max-height: 400px; overflow-y: auto; margin-top: 20px; border: 1px solid #333; }
-        table { width: 100%; border-collapse: collapse; }
-        th { position: sticky; top: 0; background: #000; color: var(--gold); padding: 12px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #333; }
+        
+        /* ESTILO DOS BOTÕES DE TROCA DE CADASTRO */
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; cursor: pointer; border: 1px solid var(--accent); background: #2a2a2a; color: white; font-family: 'Big Shoulders Display'; font-size: 1.1rem; transition: 0.3s; }
+        .tab-btn.active-tab { background: var(--primary); border-color: var(--primary); }
+
         h2 { font-family: 'Big Shoulders Display', sans-serif; font-size: 2rem; color: #fff; margin-bottom: 20px; }
     </style>
 </head>
@@ -35,98 +32,71 @@
             <div style="font-family:'Big Shoulders Display'; font-size: 1.5rem; margin-top:10px;">PIM SANTOS JJ</div>
         </div>
         <div class="nav-item active" onclick="showSection('dashboard')">Painel de Controle</div>
-        <div class="nav-item" onclick="showSection('cadastro')">Novo Aluno</div>
+        <div class="nav-item" onclick="showSection('cadastro')">Cadastros</div>
         <div class="nav-item" onclick="showSection('presenca')">Chamada</div>
     </nav>
 
     <main>
         <section id="dashboard" class="section-content active">
-            <h2>Visão Geral "Bloco 3"</h2>
+            <h2>Visão Geral</h2>
             <div class="form-card">
                 <p>Aqui aparecerão os indicadores de alunos ativos e frequentes.</p>
             </div>
         </section>
 
         <section id="cadastro" class="section-content">
-            <h2>Matrícula de Alunos "Bloco 4"</h2>
+            <h2 id="titulo-cadastro">CADASTRO DE ALUNOS</h2>
+            
+            <div class="tab-container">
+                <button id="btn-aluno" class="tab-btn active-tab" onclick="trocarForm('aluno')">ALUNOS</button>
+                <button id="btn-prof" class="tab-btn" onclick="trocarForm('professor')">PROFESSORES</button>
+            </div>
+
             <div class="form-card">
-                <form id="form-novo-aluno">
-                    <div class="grid-form">
-                        <div class="input-box"><label>Nome</label><input type="text" name="Aluno_Nome" required></div>
-                        <div class="input-box"><label>Nascimento</label><input type="date" id="Aluno_Data_Nasc" required onchange="verificarMaioridade()"></div>
-                        <div class="input-box">
-                            <label>Modalidade</label>
-                            <select name="Aluno_Modalidade">
-                                <option value="JIU-JITSU">JIU-JITSU</option>
-                                <option value="JUDÔ">JUDÔ</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="secao-responsavel" style="display:none; margin-top:20px;">
-                        <div class="input-box"><label>Responsável Legal</label><input type="text" name="Responsavel_Nome"></div>
-                    </div>
-                    <button type="submit" class="btn-salvar">Salvar Cadastro</button>
-                </form>
+                <div id="container-formulario">
+                    <p style="color:#888;">Selecione o tipo de cadastro acima...</p>
+                </div>
             </div>
         </section>
 
         <section id="presenca" class="section-content">
-            <h2>Check-in Tatame "Bloco 5"</h2>
-            
-            <div class="form-card">
-                <div class="grid-form">
-                    <div class="input-box">
-                        <label>Modalidade</label>
-                        <select id="filtro-modalidade" onchange="atualizarListaPresenca()">
-                            <option value="">Selecione...</option>
-                            </select>
-                    </div>
-                    <div class="input-box">
-                        <label>Período</label>
-                        <select id="filtro-periodo" onchange="atualizarListaPresenca()">
-                            <option value="">Selecione...</option>
-                            </select>
-                    </div>
-                </div>
-        
-                <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
-        
-                <div class="input-box">
-                    <label>Incluir Aluno de outro horário/arte (Busca)</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="busca-aluno-extra" placeholder="Digitar nome do aluno...">
-                        <button onclick="incluirAlunoExtra()" style="width: 100px;" class="btn-salvar">+</button>
-                    </div>
-                </div>
-        
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ALUNO</th>
-                                <th style="text-align: center;">PRESENÇA</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-tabela-presenca">
-                            </tbody>
-                    </table>
-                </div>
-                
-                <button class="btn-salvar" style="margin-top: 20px;" onclick="salvarChamadaDia()">Finalizar Chamada</button>
-            </div>
-        </section>
-        
+            <h2>Check-in Tatame</h2>
+            </section>
     </main>
 
-    <script src="biblioteca.js"></script>
     <script src="script.js"></script>
     <script>
-        carregarLogo('#logo-container');
+        // Função para trocar as seções do menu lateral
         function showSection(id) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(event) event.currentTarget.classList.add('active');
+            
+            // Se entrar em cadastro, carrega por padrão o de aluno
+            if(id === 'cadastro') trocarForm('aluno');
+        }
+
+        // Função que faz a troca de Aluno/Professor dentro da página
+        function trocarForm(tipo) {
+            const titulo = document.getElementById('titulo-cadastro');
+            const container = document.getElementById('container-formulario');
+            const btnA = document.getElementById('btn-aluno');
+            const btnP = document.getElementById('btn-prof');
+
+            if (tipo === 'aluno') {
+                titulo.innerText = "CADASTRO DE NOVO ALUNO";
+                btnA.classList.add('active-tab');
+                btnP.classList.remove('active-tab');
+                // Aqui chamamos o conteúdo do seu arquivo RegistroAlunos.html
+                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroAlunos" style="width:100%; height:600px; border:none;"></iframe>';
+            } else {
+                titulo.innerText = "CADASTRO DE NOVO PROFESSOR";
+                btnP.classList.add('active-tab');
+                btnA.classList.remove('active-tab');
+                // Aqui chamamos o conteúdo do seu arquivo RegistroProfessores.html
+                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroProfessores" style="width:100%; height:400px; border:none;"></iframe>';
+            }
         }
     </script>
 </body>
