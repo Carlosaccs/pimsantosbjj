@@ -65,16 +65,30 @@
     </main>
 
     <script src="script.js"></script>
-    <script>
+<script>
+        // PEGA A URL DA SUA IMPLANTAÇÃO AUTOMATICAMENTE
+        // Se você tiver um link fixo do Apps Script, pode colá-lo entre as aspas:
+        const scriptUrl = "<?= ScriptApp.getService().getUrl() ?>";
+
         // Função para trocar as seções do menu lateral
         function showSection(id) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(event) event.currentTarget.classList.add('active');
+            
+            const secao = document.getElementById(id);
+            if(secao) {
+                secao.classList.add('active');
+            }
+            
+            // Adiciona a classe active no item do menu clicado
+            if(event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
             
             // Se entrar em cadastro, carrega por padrão o de aluno
-            if(id === 'cadastro') trocarForm('aluno');
+            if(id === 'cadastro') {
+                trocarForm('aluno');
+            }
         }
 
         // Função que faz a troca de Aluno/Professor dentro da página
@@ -84,20 +98,24 @@
             const btnA = document.getElementById('btn-aluno');
             const btnP = document.getElementById('btn-prof');
 
+            // Se o scriptUrl estiver vazio ou com erro, avisa o usuário
+            if(!scriptUrl || scriptUrl.includes("<?=")) {
+                container.innerHTML = '<p style="color:red; padding:20px;">Erro: URL do script não definida. Verifique o Código.gs.</p>';
+                return;
+            }
+
             if (tipo === 'aluno') {
                 titulo.innerText = "CADASTRO DE NOVO ALUNO";
                 btnA.classList.add('active-tab');
                 btnP.classList.remove('active-tab');
-                // Aqui chamamos o conteúdo do seu arquivo RegistroAlunos.html
-                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroAlunos" style="width:100%; height:600px; border:none;"></iframe>';
+                // Carrega o formulário de Alunos
+                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroAlunos" style="width:100%; height:750px; border:none;"></iframe>';
             } else {
                 titulo.innerText = "CADASTRO DE NOVO PROFESSOR";
                 btnP.classList.add('active-tab');
                 btnA.classList.remove('active-tab');
-                // Aqui chamamos o conteúdo do seu arquivo RegistroProfessores.html
-                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroProfessores" style="width:100%; height:400px; border:none;"></iframe>';
+                // Carrega o formulário de Professores
+                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroProfessores" style="width:100%; height:500px; border:none;"></iframe>';
             }
         }
     </script>
-</body>
-</html>
