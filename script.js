@@ -15,25 +15,33 @@ window.onload = () => {
 // BLOCO 2: CADASTRO DE ALUNOS E VALIDAÇÃO DE MAIORIDADE
 // ================================================================
 function verificarMaioridade() {
-    const dataNasc = document.getElementById('Aluno_Data_Nasc').value;
-    if (!dataNasc) return;
-
-    const hoje = new Date();
-    const nascimento = new Date(dataNasc);
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
-    const m = hoje.getMonth() - nascimento.getMonth();
+    const campoData = document.getElementById('dataNasc');
+    const secaoResp = document.getElementById('secao-responsavel');
     
-    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+    if (!campoData || !campoData.value) {
+        secaoResp.style.display = 'none';
+        return;
+    }
+
+    const dataNasc = new Date(campoData.value);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNasc.getFullYear();
+    const m = hoje.getMonth() - dataNasc.getMonth();
+    
+    if (m < 0 || (m === 0 && hoje.getDate() < dataNasc.getDate())) {
         idade--;
     }
 
-    const secaoResp = document.getElementById('secao-responsavel');
     if (idade < 18) {
         secaoResp.style.display = 'block';
     } else {
         secaoResp.style.display = 'none';
+        // Opcional: limparCamposResponsavel(); 
     }
 }
+
+// Garante que comece escondido ao carregar
+window.onload = verificarMaioridade;
 
 document.getElementById('form-novo-aluno').addEventListener('submit', function(e) {
     e.preventDefault();
