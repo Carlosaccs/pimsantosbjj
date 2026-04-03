@@ -1,3 +1,8 @@
+#secao-responsavel {
+    display: none !important;
+}
+
+
 /* --- Títulos das Seções do Formulário --- */
 .form-group-title {
     font-family: 'Big Shoulders Display', sans-serif;
