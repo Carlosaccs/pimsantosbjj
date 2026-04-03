@@ -2,82 +2,71 @@
 // BLOCO 1: CONFIGURAÇÕES GERAIS E VARIÁVEIS GLOBAIS
 // ================================================================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztJh9obvf4K0W4oHDzkGXoobOzYG8Dnts-lSqSYvx2cIyQDRtElddqGlMyF6wET7WY/exec';
-let listaAlunosCache = []; // Guarda os alunos vindos da planilha
+let listaAlunosCache = []; 
 
-// Ao carregar a página, já busca os alunos e define a data de hoje no check-in
-window.onload = () => {
+// Usando addEventListener para não sobrescrever outros carregamentos
+window.addEventListener('load', () => {
     carregarListaAlunos();
-    const campoData = document.getElementById('data-presenca');
-    if(campoData) campoData.valueAsDate = new Date();
-};
-
-// Garante que comece escondido ao carregar
-window.onload = verificarMaioridade;
-
-document.getElementById('form-novo-aluno').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const secaoResponsavel = document.getElementById('secao-responsavel');
-    const nomeResp = document.getElementById('Responsavel_Nome');
-    const cpfResp = document.getElementById('Responsavel_CPF');
-
-    // Validação para menores
-    if (secaoResponsavel.style.display !== 'none') {
-        if (!nomeResp.value.trim() || !cpfResp.value.trim()) {
-            alert("⚠️ ATENÇÃO: Para menores de idade, o Nome e CPF do Responsável são obrigatórios!");
-            nomeResp.focus();
-            return;
-        }
-    }
-
-    const btn = document.getElementById('btn-submit');
-    btn.innerText = "ENVIANDO...";
-    btn.disabled = true;
-
-    const formData = new FormData(this);
-    const dados = {
-        valores: [
-            new Date().toLocaleString('pt-BR'), // A: Data Matrícula
-            formData.get('Aluno_Nome'),         // B: Nome
-            formData.get('Aluno_Data_Nasc'),    // C: Nasc
-            formData.get('Aluno_Genero'),       // D: Gênero
-            "",                                 // E: CPF Aluno
-            formData.get('Aluno_WhatsApp'),     // F: WhatsApp
-            formData.get('Aluno_Status'),       // G: Status
-            "", "",                             // H, I: Foto/Endereço
-            formData.get('Aluno_Bairro'),       // J: Bairro
-            "SÃO PAULO",                        // K: Cidade
-            "",                                 // L: CEP
-            formData.get('Responsavel_Nome') || "", // M: Nome Resp
-            formData.get('Responsavel_Condição') || "", // N: Condição
-            formData.get('Responsavel_CPF') || "",  // O: CPF Resp
-            formData.get('Aluno_Periodo') || "NÃO INFORMADO" // P: Período (Novo!)
-        ]
-    };
-
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(dados)
-    })
-    .then(() => {
-        alert("Sucesso! O aluno " + formData.get('Aluno_Nome') + " foi matriculado.");
-        this.reset();
-        secaoResponsavel.style.display = 'none';
-        carregarListaAlunos(); // Atualiza a lista interna
-    })
-    .catch(err => alert("Erro ao salvar: " + err))
-    .finally(() => {
-        btn.innerText = "FINALIZAR MATRÍCULA";
-        btn.disabled = false;
-    });
+    const campoDataPresenca = document.getElementById('data-presenca');
+    if(campoDataPresenca) campoDataPresenca.valueAsDate = new Date();
 });
+
+// ================================================================
+// BLOCO 2: ENVIO DO FORMULÁRIO (PARA CASOS DE USO DIRETO)
+// ================================================================
+const formNovoAluno = document.getElementById('form-novo-aluno');
+if (formNovoAluno) {
+    formNovoAluno.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('btn-submit');
+        btn.innerText = "ENVIANDO...";
+        btn.disabled = true;
+
+        const formData = new FormData(this);
+        const dados = {
+            valores: [
+                new Date().toLocaleString('pt-BR'), 
+                formData.get('Aluno_Nome'),          
+                formData.get('Aluno_Data_Nasc'),    
+                formData.get('Aluno_Genero'),       
+                "",                                 
+                formData.get('Aluno_WhatsApp'),     
+                formData.get('Aluno_Status'),       
+                "", "",                             
+                formData.get('Aluno_Bairro'),       
+                "SÃO PAULO",                        
+                "",                                 
+                formData.get('Responsavel_Nome') || "", 
+                formData.get('Responsavel_Condição') || "", 
+                formData.get('Responsavel_CPF') || "",  
+                formData.get('Aluno_Periodo') || "NÃO INFORMADO" 
+            ]
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        })
+        .then(() => {
+            alert("Sucesso! O aluno foi matriculado.");
+            this.reset();
+            // A lógica de esconder a seção agora é controlada pelo RegistroAlunos.html
+            carregarListaAlunos(); 
+        })
+        .catch(err => alert("Erro ao salvar: " + err))
+        .finally(() => {
+            btn.innerText = "FINALIZAR MATRÍCULA";
+            btn.disabled = false;
+        });
+    });
+}
 
 // ================================================================
 // BLOCO 3: CHECK-IN TATAME (BUSCA E TABELA POR PERÍODO)
 // ================================================================
 
 function carregarListaAlunos() {
-    // Chamada GET para a planilha
     fetch(SCRIPT_URL + "?action=getAlunos")
         .then(res => res.json())
         .then(data => {
@@ -88,14 +77,17 @@ function carregarListaAlunos() {
 }
 
 function renderizarTabelaPresenca() {
-    const periodoSel = document.getElementById('filtro-periodo').value;
+    const filtroPeriodo = document.getElementById('filtro-periodo');
     const listaContainer = document.getElementById('corpo-tabela-presenca');
-    const buscaNome = document.getElementById('busca-aluno').value.toUpperCase();
+    const campoBusca = document.getElementById('busca-aluno');
     
-    if (!listaContainer) return;
+    if (!listaContainer || !filtroPeriodo) return;
+    
+    const periodoSel = filtroPeriodo.value;
+    const buscaNome = campoBusca ? campoBusca.value.toUpperCase() : "";
+    
     listaContainer.innerHTML = "";
 
-    // Filtra por período E por nome (busca simultânea)
     const filtrados = listaAlunosCache.filter(aluno => {
         const matchesPeriodo = (periodoSel === "TODOS" || aluno.periodo === periodoSel);
         const matchesNome = aluno.nome.includes(buscaNome);
@@ -119,15 +111,17 @@ function renderizarTabelaPresenca() {
 function registrarPresenca(nomeAluno) {
     const dataTreino = document.getElementById('data-presenca').value;
     const btn = event.target;
+    const textoOriginal = btn.innerText;
+
     btn.innerText = "OK!";
     btn.style.background = "#28a745";
     btn.disabled = true;
 
     const dadosPresenca = {
         valores: [
-            new Date().toLocaleString('pt-BR'), // Data/Hora Registro
-            nomeAluno,                         // Nome do Aluno
-            dataTreino                         // Data do Treino selecionada
+            new Date().toLocaleString('pt-BR'), 
+            nomeAluno,                         
+            dataTreino                         
         ]
     };
 
@@ -136,39 +130,43 @@ function registrarPresenca(nomeAluno) {
         body: JSON.stringify(dadosPresenca)
     })
     .then(() => console.log("Presença registrada para: " + nomeAluno))
-    .catch(err => alert("Erro ao registrar presença: " + err));
+    .catch(err => {
+        alert("Erro ao registrar presença: " + err);
+        btn.innerText = textoOriginal;
+        btn.style.background = "var(--primary)";
+        btn.disabled = false;
+    });
 }
 
 // ================================================================
 // BLOCO 4: MÁSCARAS E PADRONIZAÇÃO VISUAL
 // ================================================================
 
-// Transformar em Maiúsculas
-document.querySelectorAll('input[type="text"]').forEach(input => {
-    input.addEventListener('blur', function() {
-        this.value = this.value.toUpperCase();
-    });
-});
+// Transformar em Maiúsculas nos inputs de texto
+document.addEventListener('blur', (e) => {
+    if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
+        e.target.value = e.target.value.toUpperCase();
+    }
+}, true);
 
-// Máscara WhatsApp
-const campoWhatsApp = document.querySelector('input[name="Aluno_WhatsApp"]');
-if (campoWhatsApp) {
-    campoWhatsApp.addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+// Máscaras aplicadas por delegação (melhor para elementos dinâmicos)
+document.addEventListener('input', (e) => {
+    const target = e.target;
+    
+    // WhatsApp (Identifica pelo placeholder ou ID se o Name falhar)
+    if (target.id === 'whatsapp' || target.id === 'respWhats') {
+        let v = target.value.replace(/\D/g, '').slice(0, 11);
         if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
         else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
         else if (v.length > 0) v = v.replace(/^(\d{0,2})/, '($1');
-        e.target.value = v;
-    });
-}
+        target.value = v;
+    }
 
-// Máscara CPF
-const campoCPF = document.querySelector('input[name="Responsavel_CPF"]');
-if (campoCPF) {
-    campoCPF.addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    // CPF
+    if (target.id === 'cpf' || target.id === 'respCpf') {
+        let v = target.value.replace(/\D/g, '').slice(0, 11);
         v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-        e.target.value = v;
-    });
-}
+        target.value = v;
+    }
+});
