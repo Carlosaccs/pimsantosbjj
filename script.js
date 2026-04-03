@@ -19,7 +19,8 @@ function verificarMaioridade() {
     const secaoResp = document.getElementById('secao-responsavel');
     
     if (!campoData || !campoData.value) {
-        secaoResp.style.display = 'none';
+        // Se estiver vazio, garante que fique escondido usando o !important via código
+        secaoResp.style.setProperty('display', 'none', 'important');
         return;
     }
 
@@ -33,10 +34,12 @@ function verificarMaioridade() {
     }
 
     if (idade < 18) {
-        secaoResp.style.display = 'block';
+        // Se for menor, remove o "none" e mostra como bloco
+        secaoResp.style.setProperty('display', 'block', 'important');
     } else {
-        secaoResp.style.display = 'none';
-        // Opcional: limparCamposResponsavel(); 
+        // Se for maior, volta a esconder
+        secaoResp.style.setProperty('display', 'none', 'important');
+        limparCamposResponsavel();
     }
 }
 
