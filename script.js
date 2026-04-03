@@ -11,38 +11,6 @@ window.onload = () => {
     if(campoData) campoData.valueAsDate = new Date();
 };
 
-// ================================================================
-// BLOCO 2: CADASTRO DE ALUNOS E VALIDAÇÃO DE MAIORIDADE
-// ================================================================
-function verificarMaioridade() {
-    const campoData = document.getElementById('dataNasc');
-    const secaoResp = document.getElementById('secao-responsavel');
-    
-    if (!campoData || !campoData.value) {
-        // Se estiver vazio, garante que fique escondido usando o !important via código
-        secaoResp.style.setProperty('display', 'none', 'important');
-        return;
-    }
-
-    const dataNasc = new Date(campoData.value);
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNasc.getFullYear();
-    const m = hoje.getMonth() - dataNasc.getMonth();
-    
-    if (m < 0 || (m === 0 && hoje.getDate() < dataNasc.getDate())) {
-        idade--;
-    }
-
-    if (idade < 18) {
-        // Se for menor, remove o "none" e mostra como bloco
-        secaoResp.style.setProperty('display', 'block', 'important');
-    } else {
-        // Se for maior, volta a esconder
-        secaoResp.style.setProperty('display', 'none', 'important');
-        limparCamposResponsavel();
-    }
-}
-
 // Garante que comece escondido ao carregar
 window.onload = verificarMaioridade;
 
