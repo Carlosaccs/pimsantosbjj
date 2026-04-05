@@ -1,5 +1,9 @@
 #secao-responsavel {
-    display: none !important;
+    display: none !important; /* Força sumir por padrão */
+}
+
+#secao-responsavel.mostrar {
+    display: block !important; /* Só aparece se ganhar esta classe */
 }
 
 
