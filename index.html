@@ -92,13 +92,17 @@
             
             const titulo = document.getElementById('titulo-pagina');
             const container = document.getElementById('container-formulario');
-
+        
+            // IMPORTANTE: Use a URL de implantação do Google aqui
+            const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec"; 
+        
             if (tipo === 'aluno') {
                 titulo.innerText = "Cadastro de Novo Aluno";
-                container.innerHTML = `<iframe src="${scriptUrl}?page=RegistroAlunos" style="height:780px;"></iframe>`;
+                // O iframe carrega a página RegistroAlunos SEM o menu lateral
+                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px; border:none;"></iframe>`;
             } else {
                 titulo.innerText = "Cadastro de Novo Professor";
-                container.innerHTML = `<iframe src="${scriptUrl}?page=RegistroProfessores" style="height:550px;"></iframe>`;
+                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:600px; border:none;"></iframe>`;
             }
         }
     </script>
