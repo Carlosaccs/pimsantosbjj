@@ -8,114 +8,99 @@
     <style>
         :root { --primary: #800000; --gold: #d4af37; --bg-dark: #121212; --bg-card: #1e1e1e; --text-light: #e0e0e0; --accent: #333; --sidebar-width: 260px; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* MENU LATERAL */
         nav { width: var(--sidebar-width); background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 20px 0; }
-        .nav-item { padding: 15px 25px; cursor: pointer; text-transform: uppercase; font-family: 'Big Shoulders Display', sans-serif; font-size: 1.3rem; border-left: 4px solid transparent; color: #888; transition: 0.2s; }
+        .nav-item { padding: 12px 25px; cursor: pointer; text-transform: uppercase; font-family: 'Big Shoulders Display', sans-serif; font-size: 1.1rem; border-left: 4px solid transparent; color: #888; transition: 0.2s; }
+        .nav-item:hover { color: #fff; background: #111; }
         .nav-item.active { background: var(--bg-card); color: #fff; border-left-color: var(--primary); }
-        main { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        
+        .nav-label { color: #555; font-size: 0.75rem; font-weight: bold; margin: 15px 0 5px 25px; text-transform: uppercase; letter-spacing: 1px; }
+
+        main { flex-grow: 1; padding: 30px; overflow-y: auto; }
         .section-content { display: none; }
         .section-content.active { display: block; }
-        .form-card { background: var(--bg-card); padding: 30px; border-radius: 4px; border-top: 4px solid var(--primary); max-width: 900px; }
         
-        /* ESTILO DOS BOTÕES DE TROCA DE CADASTRO */
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; cursor: pointer; border: 1px solid var(--accent); background: #2a2a2a; color: white; font-family: 'Big Shoulders Display'; font-size: 1.1rem; transition: 0.3s; }
-        .tab-btn.active-tab { background: var(--primary); border-color: var(--primary); }
+        .form-card { background: var(--bg-card); padding: 20px; border-radius: 4px; border-top: 4px solid var(--primary); max-width: 950px; }
+        
+        h2 { font-family: 'Big Shoulders Display', sans-serif; font-size: 2rem; color: #fff; margin: 0 0 20px 0; text-transform: uppercase; }
 
-        h2 { font-family: 'Big Shoulders Display', sans-serif; font-size: 2rem; color: #fff; margin-bottom: 20px; }
+        iframe { width: 100%; border: none; background: transparent; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div style="text-align:center; padding-bottom:30px;">
+        <div style="text-align:center; padding-bottom:20px;">
             <div id="logo-container"></div>
-            <div style="font-family:'Big Shoulders Display'; font-size: 1.5rem; margin-top:10px;">PIM SANTOS JJ</div>
+            <div style="font-family:'Big Shoulders Display'; font-size: 1.5rem; margin-top:10px; color: #fff;">PIM SANTOS JJ</div>
         </div>
-        <div class="nav-item active" onclick="showSection('dashboard')">Painel de Controle</div>
-        <div class="nav-item" onclick="showSection('cadastro')">Cadastros</div>
-        <div class="nav-item" onclick="showSection('presenca')">Chamada</div>
+        
+        <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
+        
+        <div class="nav-label">Cadastros</div>
+        <div class="nav-item" onclick="abrirCadastro('aluno', this)">Cadastro de Aluno</div>
+        <div class="nav-item" onclick="abrirCadastro('professor', this)">Cadastro de Professor</div>
+        
+        <div class="nav-label">Operacional</div>
+        <div class="nav-item" onclick="showSection('presenca', this)">Chamada / Check-in</div>
     </nav>
 
     <main>
         <section id="dashboard" class="section-content active">
             <h2>Visão Geral</h2>
             <div class="form-card">
-                <p>Aqui aparecerão os indicadores de alunos ativos e frequentes.</p>
+                <p>Indicadores de alunos ativos e frequentes aparecerão aqui.</p>
             </div>
         </section>
 
         <section id="cadastro" class="section-content">
-            <h2 id="titulo-cadastro">CADASTRO DE ALUNOS</h2>
-            
-            <div class="tab-container">
-                <button id="btn-aluno" class="tab-btn active-tab" onclick="trocarForm('aluno')">ALUNOS</button>
-                <button id="btn-prof" class="tab-btn" onclick="trocarForm('professor')">PROFESSORES</button>
-            </div>
-
+            <h2 id="titulo-pagina">CADASTRO</h2>
             <div class="form-card">
                 <div id="container-formulario">
-                    <p style="color:#888;">Selecione o tipo de cadastro acima...</p>
-                </div>
+                    </div>
             </div>
         </section>
 
         <section id="presenca" class="section-content">
             <h2>Check-in Tatame</h2>
-            </section>
+            <div class="form-card">
+                <p>Módulo de chamada em desenvolvimento.</p>
+            </div>
+        </section>
     </main>
 
-    <script src="script.js"></script>
-<script>
-        // PEGA A URL DA SUA IMPLANTAÇÃO AUTOMATICAMENTE
-        // Se você tiver um link fixo do Apps Script, pode colá-lo entre as aspas:
+    <script>
+        // COLE AQUI O SEU LINK ATUALIZADO DO GOOGLE APPS SCRIPT
         const scriptUrl = "https://script.google.com/macros/s/AKfycbzQwVgPWmdru7mkTqJk3izTZOxruvdFPoAYD_OiZiMJclyvScSkLBwXtRewJshM1GRR/exec";
 
-        // Função para trocar as seções do menu lateral
-        function showSection(id) {
+        // Função genérica para trocar as seções principais
+        function showSection(id, element) {
+            // Remove active de todos os itens do menu
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            // Esconde todas as seções
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             
-            const secao = document.getElementById(id);
-            if(secao) {
-                secao.classList.add('active');
-            }
-            
-            // Adiciona a classe active no item do menu clicado
-            if(event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
-            }
-            
-            // Se entrar em cadastro, carrega por padrão o de aluno
-            if(id === 'cadastro') {
-                trocarForm('aluno');
-            }
+            // Ativa a seção e o botão
+            document.getElementById(id).classList.add('active');
+            if(element) element.classList.add('active');
         }
 
-        // Função que faz a troca de Aluno/Professor dentro da página
-        function trocarForm(tipo) {
-            const titulo = document.getElementById('titulo-cadastro');
+        // Função específica para abrir os cadastros diretamente pelo menu
+        function abrirCadastro(tipo, element) {
+            showSection('cadastro', element);
+            
+            const titulo = document.getElementById('titulo-pagina');
             const container = document.getElementById('container-formulario');
-            const btnA = document.getElementById('btn-aluno');
-            const btnP = document.getElementById('btn-prof');
-
-            // Se o scriptUrl estiver vazio ou com erro, avisa o usuário
-            if(!scriptUrl || scriptUrl.includes("<?=")) {
-                container.innerHTML = '<p style="color:red; padding:20px;">Erro: URL do script não definida. Verifique o Código.gs.</p>';
-                return;
-            }
 
             if (tipo === 'aluno') {
-                titulo.innerText = "CADASTRO DE NOVO ALUNO";
-                btnA.classList.add('active-tab');
-                btnP.classList.remove('active-tab');
-                // Carrega o formulário de Alunos
-                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroAlunos" style="width:100%; height:750px; border:none;"></iframe>';
+                titulo.innerText = "Cadastro de Novo Aluno";
+                container.innerHTML = `<iframe src="${scriptUrl}?page=RegistroAlunos" style="height:780px;"></iframe>`;
             } else {
-                titulo.innerText = "CADASTRO DE NOVO PROFESSOR";
-                btnP.classList.add('active-tab');
-                btnA.classList.remove('active-tab');
-                // Carrega o formulário de Professores
-                container.innerHTML = '<iframe src="'+scriptUrl+'?page=RegistroProfessores" style="width:100%; height:500px; border:none;"></iframe>';
+                titulo.innerText = "Cadastro de Novo Professor";
+                container.innerHTML = `<iframe src="${scriptUrl}?page=RegistroProfessores" style="height:550px;"></iframe>`;
             }
         }
     </script>
+</body>
+</html>
