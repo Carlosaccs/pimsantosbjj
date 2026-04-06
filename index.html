@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pim Santos JJ | Gestão</title>
+    <title>Pim Santos BJJ | Gestão</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Big+Shoulders+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #b8860b;      /* Dourado oficial */
-            --bg-dark: #1a1a1a;     /* Chumbo (Fundo geral) */
-            --bg-sidebar: #0a0a0a;  /* Preto (Menu lateral) */
-            --bg-card: #111111;     /* Cinza muito escuro (Cards) */
-            --bg-hover: #2d2d2d;    /* Cinza destaque (Hover) */
-            --bg-active: #3d3d3d;   /* Cinza mais claro (Ativo) */
+            --primary: #b8860b; 
+            --bg-chumbo: #1a1a1a;  /* Cor Chumbo oficial */
+            --bg-sidebar: #1a1a1a; /* Agora igual ao fundo para o logo aparecer */
+            --bg-card: #111111; 
+            --bg-hover: #2d2d2d; 
+            --bg-active: #3d3d3d; 
             --text-light: #e0e0e0; 
             --sidebar-width: 260px; 
         }
 
-        /* UNIFICAÇÃO DA FONTE ROBOTO EM TUDO */
-        * { 
-            font-family: 'Roboto', sans-serif !important; 
-            box-sizing: border-box;
-        }
+        * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
 
         body { 
-            background-color: var(--bg-dark); 
+            background-color: var(--bg-chumbo); 
             color: var(--text-light); 
             margin: 0; 
             display: flex; 
@@ -32,7 +28,6 @@
             overflow: hidden; 
         }
         
-        /* MENU LATERAL (SIDEBAR) */
         nav { 
             width: var(--sidebar-width); 
             background: var(--bg-sidebar); 
@@ -43,17 +38,8 @@
             flex-shrink: 0;
         }
 
-        /* Estilo dos Títulos do Menu (Cadastros, Operacional) */
-        .nav-label { 
-            color: #555; 
-            font-size: 0.75rem; 
-            font-weight: bold; 
-            margin: 15px 0 5px 25px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-        }
+        .nav-label { color: #555; font-size: 0.75rem; font-weight: bold; margin: 15px 0 5px 25px; text-transform: uppercase; }
 
-        /* Estilo dos Botões do Menu */
         .nav-item { 
             padding: 15px 25px; 
             cursor: pointer; 
@@ -62,58 +48,26 @@
             font-size: 0.9rem; 
             border-left: 5px solid transparent; 
             color: #888; 
-            transition: all 0.3s ease; 
+            transition: 0.3s; 
         }
 
-        /* Destaque ao passar o mouse (Cinza pedido) */
-        .nav-item:hover { 
-            color: #fff; 
-            background: var(--bg-hover); 
-        }
-
-        /* Destaque quando o botão está selecionado (Cinza mais claro + Borda Dourada) */
-        .nav-item.active { 
-            background: var(--bg-active); 
-            color: #fff; 
-            border-left-color: var(--primary); 
-        }
+        .nav-item:hover { color: #fff; background: var(--bg-hover); }
+        .nav-item.active { background: var(--bg-active); color: #fff; border-left-color: var(--primary); }
         
-        /* ÁREA PRINCIPAL */
-        main { 
-            flex-grow: 1; 
-            padding: 40px; 
-            overflow-y: auto; 
-            background-color: var(--bg-dark);
-        }
+        main { flex-grow: 1; padding: 40px; overflow-y: auto; background-color: var(--bg-chumbo); }
 
-        .section-content { display: none; }
-        .section-content.active { display: block; }
-        
-        /* Títulos das Páginas (Visão Geral, Cadastro...) */
         h2 { 
             font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: 2.5rem; 
-            color: #fff; 
-            margin: 0 0 30px 0; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
+            font-size: 2.5rem; color: #fff; margin-bottom: 30px; text-transform: uppercase; 
         }
 
-        /* Container do Formulário */
         .form-card { 
             background: var(--bg-card); 
-            padding: 20px; 
-            border-radius: 4px; 
-            border-top: 4px solid var(--primary); 
-            max-width: 1000px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            padding: 20px; border-radius: 4px; border-top: 4px solid var(--primary); 
+            max-width: 1000px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        iframe { 
-            width: 100%; 
-            border: none; 
-            background: transparent; 
-        }
+        iframe { width: 100%; border: none; background: transparent; }
     </style>
 </head>
 <body>
@@ -121,9 +75,9 @@
     <nav>
         <div style="text-align:center; padding-bottom:30px;">
             <div id="logo-container">
-                <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 120px; height: auto;">
+                <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 130px; height: auto;">
             </div>
-            <div style="font-family:'Big Shoulders Display' !important; font-size: 1.8rem; margin-top:10px; color: #fff; letter-spacing: 1px;">PIM SANTOS JJ</div>
+            <div style="font-family:'Big Shoulders Display' !important; font-size: 1.8rem; margin-top:10px; color: #fff;">PIM SANTOS BJJ</div>
         </div>
         
         <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
@@ -139,53 +93,44 @@
     <main>
         <section id="dashboard" class="section-content active">
             <h2>Visão Geral</h2>
-            <div class="form-card">
-                <p style="color: #bbb;">Indicadores de alunos ativos e frequentes aparecerão aqui.</p>
-            </div>
+            <div class="form-card"><p style="color: #bbb;">Indicadores aparecerão aqui.</p></div>
         </section>
 
         <section id="cadastro" class="section-content">
             <h2 id="titulo-pagina">CADASTRO</h2>
             <div class="form-card">
-                <div id="container-formulario">
-                    </div>
+                <div id="container-formulario"></div>
             </div>
         </section>
 
         <section id="presenca" class="section-content">
             <h2>Check-in Tatame</h2>
-            <div class="form-card">
-                <p style="color: #bbb;">Módulo de chamada em desenvolvimento.</p>
-            </div>
+            <div class="form-card"><p style="color: #bbb;">Em desenvolvimento.</p></div>
         </section>
     </main>
 
     <script>
-        // Função para trocar as seções principais
         function showSection(id, element) {
+            // Limpa a URL para remover dados de formulário antigos ao trocar de seção
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             if(element) element.classList.add('active');
         }
 
-        // Função para carregar o Google Apps Script no Iframe
         function abrirCadastro(tipo, element) {
             showSection('cadastro', element);
-            
-            const titulo = document.getElementById('titulo-pagina');
             const container = document.getElementById('container-formulario');
-        
-            // Sua URL do Google Apps Script
             const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec"; 
         
             if (tipo === 'aluno') {
-                titulo.innerText = "Cadastro de Novo Aluno";
-                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px; border:none;"></iframe>`;
+                document.getElementById('titulo-pagina').innerText = "Cadastro de Novo Aluno";
+                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
             } else {
-                titulo.innerText = "Cadastro de Novo Professor";
-                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:600px; border:none;"></iframe>`;
+                document.getElementById('titulo-pagina').innerText = "Cadastro de Novo Professor";
+                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:600px;"></iframe>`;
             }
         }
     </script>
