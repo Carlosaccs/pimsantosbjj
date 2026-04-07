@@ -57,3 +57,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .col-full {
     grid-column: span 2;
 }
+
+.main-content {
+    margin-left: 250px;
+    padding: 40px;
+    width: calc(100% - 250px); /* Garante que não ultrapasse a tela */
+    max-width: 1200px; /* Alinha com o final da linha amarela do formulário */
+    background: #1a1a1a !important;
+}
+
+/* Forçar o botão Salvar a ficar na extremidade direita do formulário */
+.header-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    padding-right: 0; 
+}
