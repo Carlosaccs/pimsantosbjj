@@ -1,4 +1,4 @@
-/* FORÇAR FONTE E FUNDO EM TUDO */
+/* 1. CONFIGURAÇÕES GERAIS E FONTES */
 * {
   font-family: 'Roboto', sans-serif !important;
   box-sizing: border-box;
@@ -11,12 +11,12 @@ body {
   color: white;
 }
 
-/* ESCONDER O MENU ANTIGO */
+/* 2. OCULTA ELEMENTOS ANTIGOS DO SISTEMA */
 nav {
   display: none !important;
 }
 
-/* SEU NOVO MENU (SIDEBAR) */
+/* 3. ESTRUTURA DA SIDEBAR E CONTEÚDO PRINCIPAL */
 .sidebar-nova {
   width: 250px;
   background: #000 !important;
@@ -35,7 +35,7 @@ nav {
   background: #1a1a1a !important;
 }
 
-/* ESTILO DOS CAMPOS COM BORDA DOURADA */
+/* 4. ESTILIZAÇÃO DOS CAMPOS (BORDA DOURADA) */
 .field-box {
   border: 1px solid #b8860b !important;
   background: #000 !important;
@@ -60,42 +60,38 @@ input, select, textarea {
   text-transform: uppercase;
 }
 
-/* ============================================================
-   ESTILO DO BOTÃO SALVAR (NO TOPO DO DASHBOARD)
-   ============================================================ */
+/* 5. LOGICA DE COR DO BOTÃO SALVAR (ID: btnSalvar) */
 
-/* O segredo está aqui: o estado padrão AGORA É CINZA */
+/* PADRÃO: CINZA (Formulário incompleto) */
 #btnSalvar {
-  background-color: #555 !important; /* Inicia Cinza */
-  color: #222 !important;            /* Texto cinza escuro */
+  background-color: #555 !important;
+  color: #222 !important; /* Texto cinza escuro para parecer desabilitado */
   border: none !important;
   padding: 10px 30px;
   border-radius: 4px;
   font-weight: bold;
   cursor: not-allowed;
   text-transform: uppercase;
-  transition: 0.3s;
+  transition: 0.3s ease;
   opacity: 0.6;
 }
 
-/* SÓ FICA VERMELHO QUANDO O JS ADICIONAR A CLASSE .ativo */
+/* ESTADO ATIVO: VERMELHO (Formulário preenchido) */
 #btnSalvar.ativo {
-  background-color: #8b0000 !important; /* Vermelho */
-  color: #ffffff !important;            /* Texto branco */
+  background-color: #8b0000 !important;
+  color: #ffffff !important;
   cursor: pointer;
   opacity: 1;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
+  box-shadow: 0 0 12px rgba(139, 0, 0, 0.5);
 }
 
-/* Efeito de brilho apenas quando estiver vermelho (ativo) */
+/* Efeito ao passar o mouse quando estiver ativo */
 #btnSalvar.ativo:hover {
   background-color: #a00000 !important;
   transform: translateY(-1px);
 }
 
-/* ============================================================ */
-
-/* Ajuste Mobile */
+/* 6. RESPONSIVIDADE PARA TELAS MENORES */
 @media (max-width: 768px) {
   .sidebar-nova { width: 60px; }
   .main-content { margin-left: 60px; padding: 15px; }
