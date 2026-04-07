@@ -15,87 +15,69 @@
             --bg-active: #3d3d3d; 
             --text-light: #e0e0e0; 
             --sidebar-width: 260px; 
+            --vermelho-block: #5a0000;
+            --vermelho-viva: #b30000;
         }
 
         * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
-
-        body { 
-            background-color: var(--bg-chumbo); 
-            color: var(--text-light); 
-            margin: 0; 
-            display: flex; 
-            height: 100vh; 
-            overflow: hidden; 
-        }
+        body { background-color: var(--bg-chumbo); color: var(--text-light); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
         nav { 
-            width: var(--sidebar-width); 
-            background: var(--bg-sidebar); 
-            border-right: 2px solid var(--primary); 
-            display: flex; 
-            flex-direction: column; 
-            padding: 20px 0; 
-            flex-shrink: 0;
-            overflow-y: auto;
+            width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 2px solid var(--primary); 
+            display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; overflow-y: auto;
         }
 
         .nav-label { color: #555; font-size: 0.75rem; font-weight: bold; margin: 15px 0 5px 25px; text-transform: uppercase; }
-
-        .nav-item { 
-            padding: 12px 25px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-weight: 700;
-            font-size: 0.85rem; 
-            border-left: 5px solid transparent; 
-            color: #888; 
-            transition: 0.3s; 
-        }
-
+        .nav-item { padding: 12px 25px; cursor: pointer; text-transform: uppercase; font-weight: 700; font-size: 0.85rem; border-left: 5px solid transparent; color: #888; transition: 0.3s; }
         .nav-item:hover { color: #fff; background: var(--bg-hover); }
         .nav-item.active { background: var(--bg-active); color: #fff; border-left-color: var(--primary); }
         
         main { flex-grow: 1; padding: 40px; overflow-y: auto; background-color: var(--bg-chumbo); }
+        h2 { font-family: 'Big Shoulders Display', sans-serif !important; font-size: 2.5rem; color: #fff; margin-bottom: 20px; text-transform: uppercase; }
 
-        h2 { 
-            font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: 2.5rem; color: #fff; margin-bottom: 20px; text-transform: uppercase; 
-        }
-
-        /* ESTILO DAS NOVAS ABAS (SUBPÁGINAS) */
+        /* BARRA DE NAVEGAÇÃO E BOTÃO SALVAR */
         .tab-container {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 25px;
             border-bottom: 1px solid #333;
             padding-bottom: 15px;
         }
 
+        .tabs-wrapper { display: flex; gap: 10px; }
+
         .tab-button {
-            background: #2d2d2d;
+            background: #2d2d2d; color: #888; border: 1px solid #444; padding: 10px 18px;
+            cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.75rem; border-radius: 4px; transition: 0.3s;
+        }
+        .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* ESTILO DO BOTÃO SALVAR NO TOPO */
+        .btn-salvar {
+            background-color: var(--vermelho-block);
             color: #888;
             border: 1px solid #444;
-            padding: 10px 18px;
-            cursor: pointer;
+            padding: 10px 30px;
+            cursor: not-allowed;
             text-transform: uppercase;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             border-radius: 4px;
             transition: 0.3s;
         }
 
-        .tab-button:hover { background: #3d3d3d; color: #fff; }
-        .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-salvar.ativo {
+            background-color: var(--vermelho-viva);
+            color: white;
+            cursor: pointer;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(179, 0, 0, 0.4);
+        }
 
         .section-content { display: none; }
         .section-content.active { display: block; }
-
-        .form-card { 
-            background: var(--bg-card); 
-            padding: 20px; border-radius: 4px; border-top: 4px solid var(--primary); 
-            max-width: 1100px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
+        .form-card { background: var(--bg-card); padding: 20px; border-radius: 4px; border-top: 4px solid var(--primary); max-width: 1100px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         iframe { width: 100%; border: none; background: transparent; }
     </style>
 </head>
@@ -106,63 +88,30 @@
             <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 120px; height: auto;">
             <div style="font-family:'Big Shoulders Display' !important; font-size: 1.6rem; margin-top:10px; color: #fff;">PIM SANTOS BJJ</div>
         </div>
-        
         <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
-        
         <div class="nav-label">Gestão de Alunos</div>
         <div class="nav-item" onclick="abrirAluno(this)">Prontuário do Aluno</div>
-        
         <div class="nav-label">Cadastros</div>
         <div class="nav-item" onclick="abrirCadastro('professor', this)">Professores</div>
-        <div class="nav-item" onclick="showSection('atividades', this)">Atividades (Artes)</div>
-        <div class="nav-item" onclick="showSection('movimentos', this)">Movimentos / Golpes</div>
-        
-        <div class="nav-label">Operacional</div>
-        <div class="nav-item" onclick="showSection('presenca-geral', this)">Chamada Rápida</div>
     </nav>
 
     <main>
-        <section id="dashboard" class="section-content active">
-            <h2>Visão Geral</h2>
-            <div class="form-card"><p style="color: #bbb;">Indicadores aparecerão aqui.</p></div>
-        </section>
-
         <section id="secao-aluno" class="section-content">
             <h2 id="nome-aluno-titulo">ALUNO</h2>
-            
             <div class="tab-container">
-                <div style="display: flex; gap: 10px;">
+                <div class="tabs-wrapper">
                     <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">Cadastro</div>
                     <div class="tab-button" onclick="mudarSubAba('presenca', this)">Presença</div>
                     <div class="tab-button" onclick="mudarSubAba('nivel', this)">Nível/Faixa</div>
-                    <div class="tab-button" onclick="mudarSubAba('evolucao', this)">Evolução</div>
-                    <div class="tab-button" onclick="mudarSubAba('saude', this)">Saúde</div>
                 </div>
-                
                 <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>SALVAR</button>
             </div>
-
-            <div class="form-card">
-                <div id="container-aluno-content">
-                    </div>
-            </div>
+            <div class="form-card"><div id="container-aluno-content"></div></div>
         </section>
 
         <section id="outros-cadastros" class="section-content">
             <h2 id="titulo-outros">CADASTRO</h2>
-            <div class="form-card">
-                <div id="container-outros"></div>
-            </div>
-        </section>
-
-        <section id="atividades" class="section-content">
-            <h2>Gestão de Atividades</h2>
-            <div class="form-card"><p style="color: #bbb;">Aqui você cadastrará Judô, Jiu-Jitsu, etc.</p></div>
-        </section>
-
-        <section id="movimentos" class="section-content">
-            <h2>Dicionário de Movimentos</h2>
-            <div class="form-card"><p style="color: #bbb;">Cadastro de Armlocks, Raspagens, etc.</p></div>
+            <div class="form-card"><div id="container-outros"></div></div>
         </section>
     </main>
 
@@ -170,45 +119,29 @@
         const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
 
         function showSection(id, element) {
-            window.history.replaceState({}, document.title, window.location.pathname);
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             if(element) element.classList.add('active');
         }
 
-        // Função para abrir a Central do Aluno
         function abrirAluno(element) {
             showSection('secao-aluno', element);
             mudarSubAba('cadastro', document.querySelector('.tab-button'));
         }
 
-        // Função para navegar entre as sub-abas do Aluno
         function mudarSubAba(tipo, element) {
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             element.classList.add('active');
-            
             const container = document.getElementById('container-aluno-content');
-            
             if(tipo === 'cadastro') {
-                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
+                container.innerHTML = `<iframe id="frameCadastro" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
             } else {
-                container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em desenvolvimento.</div>`;
+                container.innerHTML = `<div style="padding:50px; text-align:center;">Módulo em desenvolvimento.</div>`;
             }
         }
 
-        // Função para cadastros externos (Professor)
-        function abrirCadastro(tipo, element) {
-            showSection('outros-cadastros', element);
-            const container = document.getElementById('container-outros');
-            if (tipo === 'professor') {
-                document.getElementById('titulo-outros').innerText = "Cadastro de Professor";
-                container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:800px;"></iframe>`;
-            }
-        }
-
-        // Função para ativar/desativar o botão baseado no preenchimento
+        // COMUNICAÇÃO COM O IFRAME
         function validarFormulario(estaValido) {
             const btn = document.getElementById('btnSalvarGlobal');
             if (estaValido) {
@@ -219,16 +152,16 @@
                 btn.disabled = true;
             }
         }
-        
-        // Função que manda o comando para o Iframe salvar
+
         function dispararSalvamento() {
             const iframe = document.querySelector('#container-aluno-content iframe');
-            if (iframe) {
-                // Manda uma mensagem para o Iframe executar a função salvar() dele
-                iframe.contentWindow.postMessage('executarSalvar', '*');
-            }
+            if (iframe) iframe.contentWindow.postMessage('executarSalvar', '*');
         }
-        
+
+        window.addEventListener('message', (event) => {
+            if (event.data === 'formPronto') validarFormulario(true);
+            if (event.data === 'formIncompleto') validarFormulario(false);
+        });
     </script>
 </body>
 </html>
