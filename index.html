@@ -107,14 +107,22 @@
 
         <section id="secao-registro" class="section-content">
             <h2 id="titulo-central">ALUNO</h2>
-            <div class="tab-container">
-                <div id="wrapper-abas" class="tabs-wrapper">
+            
+            <div class="tab-container" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                <div id="wrapper-abas" class="tabs-wrapper" style="display: flex; gap: 5px;">
                     <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">Cadastro</div>
                     <div class="tab-button" onclick="mudarSubAba('presenca', this)">Presença</div>
                     <div class="tab-button" onclick="mudarSubAba('nivel', this)">Nível/Faixa</div>
+                    <div class="tab-button" onclick="mudarSubAba('evolucao', this)">Evolução</div>
+                    <div class="tab-button" onclick="mudarSubAba('saude', this)">Saúde</div>
                 </div>
-                <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>SALVAR</button>
+                
+                <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled 
+                        style="margin-left: auto; background-color: #8b0000; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                    SALVAR
+                </button>
             </div>
+        
             <div class="form-card">
                 <div id="container-iframe"></div>
             </div>
