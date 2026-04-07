@@ -1,61 +1,107 @@
-<style>
-  /* FORÇAR FONTE E FUNDO EM TUDO */
-  * {
-    font-family: 'Roboto', sans-serif !important; 
-  }
+/* FORÇAR FONTE E FUNDO EM TUDO */
+* {
+  font-family: 'Roboto', sans-serif !important;
+  box-sizing: border-box;
+}
 
-  body { 
-    background-color: #1a1a1a !important; 
-    display: flex !important;
-    margin: 0 !important;
-  }
+body {
+  background-color: #1a1a1a !important;
+  display: flex !important;
+  margin: 0 !important;
+  color: white;
+}
 
-  /* ESCONDER O MENU ANTIGO (A tag <nav> que aparece no seu DevTools) */
-  nav {
-    display: none !important;
-  }
+/* ESCONDER O MENU ANTIGO */
+nav {
+  display: none !important;
+}
 
-  /* SEU NOVO MENU (SIDEBAR) */
+/* SEU NOVO MENU (SIDEBAR) */
+.sidebar-nova {
+  width: 250px;
+  background: #000 !important;
+  height: 100vh;
+  border-right: 2px solid #b8860b;
+  display: flex !important;
+  flex-direction: column;
+  position: fixed;
+  z-index: 9999;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 40px;
+  width: 100%;
+  background: #1a1a1a !important;
+}
+
+/* ESTILO DOS CAMPOS COM BORDA DOURADA */
+.field-box {
+  border: 1px solid #b8860b !important;
+  background: #000 !important;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.field-box label {
+  color: #b8860b !important;
+  font-size: 11px;
+  font-weight: bold;
+  display: block;
+}
+
+input, select, textarea {
+  background: transparent !important;
+  color: white !important;
+  border: none !important;
+  width: 100%;
+  outline: none !important;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   ESTILO DO BOTÃO SALVAR (NO TOPO DO DASHBOARD)
+   ============================================================ */
+
+/* ESTADO INICIAL: CINZA (Quando o formulário está vazio) */
+#btnSalvar {
+  background-color: #555 !important; /* Fundo cinza */
+  color: #222 !important;            /* Texto cinza escuro */
+  border: none !important;
+  padding: 10px 30px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: not-allowed;               /* Cursor de "proibido" */
+  text-transform: uppercase;
+  transition: 0.3s;
+  opacity: 0.6;
+}
+
+/* ESTADO ATIVO: VERMELHO (Quando o formulário está preenchido) */
+#btnSalvar.ativo {
+  background-color: #8b0000 !important; /* Vermelho escuro */
+  color: #ffffff !important;            /* Texto branco */
+  cursor: pointer;                      /* Cursor de clique */
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
+}
+
+/* Efeito de hover apenas quando estiver ativo */
+#btnSalvar.ativo:hover {
+  background-color: #a00000 !important;
+  transform: translateY(-1px);
+}
+
+/* ============================================================ */
+
+/* Ajuste para o formulário no mobile ou telas menores */
+@media (max-width: 768px) {
   .sidebar-nova {
-    width: 250px;
-    background: #000 !important;
-    height: 100vh;
-    border-right: 2px solid #b8860b;
-    display: flex !important;
-    flex-direction: column;
-    position: fixed;
-    z-index: 9999; /* Garante que fique por cima de tudo */
+    width: 60px;
   }
-
   .main-content {
-    margin-left: 250px;
-    padding: 40px;
-    width: 100%;
-    background: #1a1a1a !important;
+    margin-left: 60px;
+    padding: 15px;
   }
-
-  /* ESTILO DOS CAMPOS COM BORDA DOURADA */
-  .field-box {
-    border: 1px solid #b8860b !important;
-    background: #000 !important;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-
-  .field-box label {
-    color: #b8860b !important;
-    font-size: 11px;
-    font-weight: bold;
-    display: block;
-  }
-
-  input, select, textarea {
-    background: transparent !important;
-    color: white !important;
-    border: none !important;
-    width: 100%;
-    outline: none !important;
-    text-transform: uppercase;
-  }
-</style>
+}
