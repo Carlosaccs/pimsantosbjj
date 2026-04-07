@@ -207,6 +207,28 @@
                 container.innerHTML = `<iframe src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:800px;"></iframe>`;
             }
         }
+
+        // Função para ativar/desativar o botão baseado no preenchimento
+        function validarFormulario(estaValido) {
+            const btn = document.getElementById('btnSalvarGlobal');
+            if (estaValido) {
+                btn.classList.add('ativo');
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('ativo');
+                btn.disabled = true;
+            }
+        }
+        
+        // Função que manda o comando para o Iframe salvar
+        function dispararSalvamento() {
+            const iframe = document.querySelector('#container-aluno-content iframe');
+            if (iframe) {
+                // Manda uma mensagem para o Iframe executar a função salvar() dele
+                iframe.contentWindow.postMessage('executarSalvar', '*');
+            }
+        }
+        
     </script>
 </body>
 </html>
