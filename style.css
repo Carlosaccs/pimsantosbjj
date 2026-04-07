@@ -1,61 +1,59 @@
-<style>
-  /* FORÇAR FONTE E FUNDO EM TUDO */
-  * {
-    font-family: 'Roboto', sans-serif !important; 
-  }
+/* ARQUIVO: style.css - LIMPO E COMPATÍVEL */
 
-  body { 
-    background-color: #1a1a1a !important; 
-    display: flex !important;
-    margin: 0 !important;
-  }
+/* Reset básico para garantir que o formulário dentro do Iframe fique bonito */
+* {
+    font-family: 'Roboto', sans-serif !important;
+    box-sizing: border-box;
+}
 
-  /* ESCONDER O MENU ANTIGO (A tag <nav> que aparece no seu DevTools) */
-  nav {
-    display: none !important;
-  }
-
-  /* SEU NOVO MENU (SIDEBAR) */
-  .sidebar-nova {
-    width: 250px;
-    background: #000 !important;
-    height: 100vh;
-    border-right: 2px solid #b8860b;
-    display: flex !important;
-    flex-direction: column;
-    position: fixed;
-    z-index: 9999; /* Garante que fique por cima de tudo */
-  }
-
-  .main-content {
-    margin-left: 250px;
-    padding: 40px;
-    width: 100%;
-    background: #1a1a1a !important;
-  }
-
-  /* ESTILO DOS CAMPOS COM BORDA DOURADA */
-  .field-box {
-    border: 1px solid #b8860b !important;
-    background: #000 !important;
-    border-radius: 4px;
+body {
+    background-color: #1a1a1a !important;
+    margin: 0;
     padding: 10px;
-    margin-bottom: 10px;
-  }
+    color: white;
+}
 
-  .field-box label {
+/* ESTILO DOS CAMPOS (DENTRO DOS FORMULÁRIOS) */
+.field-box {
+    border: 1px solid #b8860b !important;
+    background: #111 !important;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-box label {
     color: #b8860b !important;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
-    display: block;
-  }
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
 
-  input, select, textarea {
+input, select, textarea {
     background: transparent !important;
     color: white !important;
     border: none !important;
     width: 100%;
     outline: none !important;
     text-transform: uppercase;
-  }
-</style>
+    font-size: 14px;
+}
+
+/* Estilo para inputs de data (ícone branco) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+/* Grid para os formulários ficarem lado a lado */
+.grid-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.col-full {
+    grid-column: span 2;
+}
