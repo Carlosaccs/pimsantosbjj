@@ -105,10 +105,10 @@
             <div class="form-card"><p style="color: #666;">Painel de indicadores em desenvolvimento.</p></div>
         </section>
 
-        <section id="secao-registro" class="section-content">
-            <h2 id="titulo-central">ALUNO</h2>
+        <section id="secao-registro" class="section-content" style="max-width: 1000px; margin-left: 20px;">
+            <h2 id="titulo-central" style="margin-left: 0;">PRONTUÁRIO DO ALUNO</h2>
             
-            <div class="tab-container" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; max-width: 900px;">
+            <div class="tab-container" style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; margin-bottom: 10px;">
                 <div id="wrapper-abas" class="tabs-wrapper" style="display: flex; gap: 5px;">
                     <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">CADASTRO</div>
                     <div class="tab-button" onclick="mudarSubAba('presenca', this)">PRESENÇA</div>
@@ -118,12 +118,12 @@
                 </div>
                 
                 <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled 
-                        style="padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; background-color: #8b0000; color: white;">
+                        style="margin: 0; padding: 10px 30px; background-color: #8b0000; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
                     SALVAR
                 </button>
             </div>
         
-            <div class="form-card">
+            <div class="form-card" style="width: 100%; border-top: 2px solid #b8860b; padding-top: 15px;">
                 <div id="container-iframe"></div>
             </div>
         </section>
