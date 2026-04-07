@@ -1,75 +1,239 @@
-/* ARQUIVO: style.css - LIMPO E COMPATÍVEL */
+// ================================================================
+// BLOCO 1: CONFIGURAÇÕES GERAIS E VARIÁVEIS GLOBAIS
+// ================================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztJh9obvf4K0W4oHDzkGXoobOzYG8Dnts-lSqSYvx2cIyQDRtElddqGlMyF6wET7WY/exec';
+let listaAlunosCache = []; 
 
-/* Reset básico para garantir que o formulário dentro do Iframe fique bonito */
-* {
-    font-family: 'Roboto', sans-serif !important;
-    box-sizing: border-box;
+// Usando addEventListener para não sobrescrever outros carregamentos
+window.addEventListener('load', () => {
+    carregarListaAlunos();
+    const campoDataPresenca = document.getElementById('data-presenca');
+    if(campoDataPresenca) campoDataPresenca.valueAsDate = new Date();
+});
+
+// ================================================================
+// BLOCO 2: ENVIO DO FORMULÁRIO (PARA CASOS DE USO DIRETO)
+// ================================================================
+const formNovoAluno = document.getElementById('form-novo-aluno');
+if (formNovoAluno) {
+    formNovoAluno.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('btn-submit');
+        btn.innerText = "ENVIANDO...";
+        btn.disabled = true;
+
+        const formData = new FormData(this);
+        const dados = {
+            valores: [
+                new Date().toLocaleString('pt-BR'), 
+                formData.get('Aluno_Nome'),          
+                formData.get('Aluno_Data_Nasc'),    
+                formData.get('Aluno_Genero'),       
+                "",                                 
+                formData.get('Aluno_WhatsApp'),     
+                formData.get('Aluno_Status'),       
+                "", "",                             
+                formData.get('Aluno_Bairro'),       
+                "SÃO PAULO",                        
+                "",                                 
+                formData.get('Responsavel_Nome') || "", 
+                formData.get('Responsavel_Condição') || "", 
+                formData.get('Responsavel_CPF') || "",  
+                formData.get('Aluno_Periodo') || "NÃO INFORMADO" 
+            ]
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        })
+        .then(() => {
+            alert("Sucesso! O aluno foi matriculado.");
+            this.reset();
+            // A lógica de esconder a seção agora é controlada pelo RegistroAlunos.html
+            carregarListaAlunos(); 
+        })
+        .catch(err => alert("Erro ao salvar: " + err))
+        .finally(() => {
+            btn.innerText = "FINALIZAR MATRÍCULA";
+            btn.disabled = false;
+        });
+    });
 }
 
-body {
-    background-color: #1a1a1a !important;
-    margin: 0;
-    padding: 10px;
-    color: white;
+// ================================================================
+// BLOCO 3: CHECK-IN TATAME (BUSCA E TABELA POR PERÍODO)
+// ================================================================
+
+function carregarListaAlunos() {
+    fetch(SCRIPT_URL + "?action=getAlunos")
+        .then(res => res.json())
+        .then(data => {
+            listaAlunosCache = data;
+            renderizarTabelaPresenca();
+        })
+        .catch(err => console.error("Erro ao carregar alunos:", err));
 }
 
-/* ESTILO DOS CAMPOS (DENTRO DOS FORMULÁRIOS) */
-.field-box {
-    border: 1px solid #b8860b !important;
-    background: #111 !important;
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    display: flex;
+function renderizarTabelaPresenca() {
+    const filtroPeriodo = document.getElementById('filtro-periodo');
+    const listaContainer = document.getElementById('corpo-tabela-presenca');
+    const campoBusca = document.getElementById('busca-aluno');
+    
+    if (!listaContainer || !filtroPeriodo) return;
+    
+    const periodoSel = filtroPeriodo.value;
+    const buscaNome = campoBusca ? campoBusca.value.toUpperCase() : "";
+    
+    listaContainer.innerHTML = "";
+
+    const filtrados = listaAlunosCache.filter(aluno => {
+        const matchesPeriodo = (periodoSel === "TODOS" || aluno.periodo === periodoSel);
+        const matchesNome = aluno.nome.includes(buscaNome);
+        return matchesPeriodo && matchesNome;
+    });
+
+    filtrados.forEach(aluno => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = "1px solid #444";
+        tr.innerHTML = `
+            <td style="padding: 12px;"><strong>${aluno.nome}</strong></td>
+            <td style="padding: 12px; font-size: 0.8rem; color: #aaa;">${aluno.periodo}</td>
+            <td style="padding: 12px; text-align: center;">
+                <button onclick="registrarPresenca('${aluno.nome}')" style="background: var(--primary); color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;">CONFIRMAR</button>
+            </td>
+        `;
+        listaContainer.appendChild(tr);
+    });
+}
+
+function registrarPresenca(nomeAluno) {
+    const dataTreino = document.getElementById('data-presenca').value;
+    const btn = event.target;
+    const textoOriginal = btn.innerText;
+
+    btn.innerText = "OK!";
+    btn.style.background = "#28a745";
+    btn.disabled = true;
+
+    const dadosPresenca = {
+        valores: [
+            new Date().toLocaleString('pt-BR'), 
+            nomeAluno,                         
+            dataTreino                         
+        ]
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(dadosPresenca)
+    })
+    .then(() => console.log("Presença registrada para: " + nomeAluno))
+    .catch(err => {
+        alert("Erro ao registrar presença: " + err);
+        btn.innerText = textoOriginal;
+        btn.style.background = "var(--primary)";
+        btn.disabled = false;
+    });
+}
+
+// ================================================================
+// BLOCO 4: MÁSCARAS E PADRONIZAÇÃO VISUAL
+// ================================================================
+
+// Transformar em Maiúsculas nos inputs de texto
+document.addEventListener('blur', (e) => {
+    if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
+        e.target.value = e.target.value.toUpperCase();
+    }
+}, true);
+
+// Máscaras aplicadas por delegação (melhor para elementos dinâmicos)
+document.addEventListener('input', (e) => {
+    const target = e.target;
+    
+    // WhatsApp (Identifica pelo placeholder ou ID se o Name falhar)
+    if (target.id === 'whatsapp' || target.id === 'respWhats') {
+        let v = target.value.replace(/\D/g, '').slice(0, 11);
+        if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        else if (v.length > 0) v = v.replace(/^(\d{0,2})/, '($1');
+        target.value = v;
+    }
+
+    // CPF
+    if (target.id === 'cpf' || target.id === 'respCpf') {
+        let v = target.value.replace(/\D/g, '').slice(0, 11);
+        v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        target.value = v;
+    }
+});
+
+
+-------------------------------------
+STYLE.CSS:
+-------------------------------------
+
+<style>
+  /* FORÇAR FONTE E FUNDO EM TUDO */
+  * {
+    font-family: 'Roboto', sans-serif !important; 
+  }
+
+  body { 
+    background-color: #1a1a1a !important; 
+    display: flex !important;
+    margin: 0 !important;
+  }
+
+  /* ESCONDER O MENU ANTIGO (A tag <nav> que aparece no seu DevTools) */
+  nav {
+    display: none !important;
+  }
+
+  /* SEU NOVO MENU (SIDEBAR) */
+  .sidebar-nova {
+    width: 250px;
+    background: #000 !important;
+    height: 100vh;
+    border-right: 2px solid #b8860b;
+    display: flex !important;
     flex-direction: column;
-}
+    position: fixed;
+    z-index: 9999; /* Garante que fique por cima de tudo */
+  }
 
-.field-box label {
+  .main-content {
+    margin-left: 250px;
+    padding: 40px;
+    width: 100%;
+    background: #1a1a1a !important;
+  }
+
+  /* ESTILO DOS CAMPOS COM BORDA DOURADA */
+  .field-box {
+    border: 1px solid #b8860b !important;
+    background: #000 !important;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .field-box label {
     color: #b8860b !important;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-}
+    display: block;
+  }
 
-input, select, textarea {
+  input, select, textarea {
     background: transparent !important;
     color: white !important;
     border: none !important;
     width: 100%;
     outline: none !important;
     text-transform: uppercase;
-    font-size: 14px;
-}
-
-/* Estilo para inputs de data (ícone branco) */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
-
-/* Grid para os formulários ficarem lado a lado */
-.grid-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.col-full {
-    grid-column: span 2;
-}
-
-.main-content {
-    margin-left: 250px;
-    padding: 40px;
-    width: calc(100% - 250px); /* Garante que não ultrapasse a tela */
-    max-width: 1200px; /* Alinha com o final da linha amarela do formulário */
-    background: #1a1a1a !important;
-}
-
-/* Forçar o botão Salvar a ficar na extremidade direita do formulário */
-.header-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-    padding-right: 0; 
-}
+  }
+</style>
