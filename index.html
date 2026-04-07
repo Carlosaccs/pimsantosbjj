@@ -154,19 +154,21 @@
         function abrirCadastro(tipo, element) {
             if (tipo === 'professor') {
                 document.getElementById('titulo-central').innerText = "CADASTRO DE PROFESSOR";
-                document.getElementById('wrapper-abas').style.display = "none"; // Esconde abas de aluno
+                document.getElementById('wrapper-abas').style.display = "none";
                 showSection('secao-registro', element);
-                document.getElementById('container-iframe').innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:800px;"></iframe>`;
+                // Aumentado para 950px aqui
+                document.getElementById('container-iframe').innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:950px; border:none; background:transparent;"></iframe>`;
             }
         }
-
+        
         function mudarSubAba(tipo, element) {
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             if(element) element.classList.add('active');
             
             const container = document.getElementById('container-iframe');
             if(tipo === 'cadastro') {
-                container.innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
+                // Aumentado para 950px aqui também
+                container.innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:950px; border:none; background:transparent;"></iframe>`;
             } else {
                 container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em breve.</div>`;
             }
