@@ -131,11 +131,15 @@
             <h2 id="nome-aluno-titulo">ALUNO</h2>
             
             <div class="tab-container">
-                <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">Cadastro</div>
-                <div class="tab-button" onclick="mudarSubAba('presenca', this)">Presença</div>
-                <div class="tab-button" onclick="mudarSubAba('nivel', this)">Nível/Faixa</div>
-                <div class="tab-button" onclick="mudarSubAba('evolucao', this)">Evolução</div>
-                <div class="tab-button" onclick="mudarSubAba('saude', this)">Saúde</div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">Cadastro</div>
+                    <div class="tab-button" onclick="mudarSubAba('presenca', this)">Presença</div>
+                    <div class="tab-button" onclick="mudarSubAba('nivel', this)">Nível/Faixa</div>
+                    <div class="tab-button" onclick="mudarSubAba('evolucao', this)">Evolução</div>
+                    <div class="tab-button" onclick="mudarSubAba('saude', this)">Saúde</div>
+                </div>
+                
+                <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>SALVAR</button>
             </div>
 
             <div class="form-card">
