@@ -64,30 +64,30 @@ input, select, textarea {
    ESTILO DO BOTÃO SALVAR (NO TOPO DO DASHBOARD)
    ============================================================ */
 
-/* ESTADO INICIAL: CINZA (Quando o formulário está vazio) */
+/* O segredo está aqui: o estado padrão AGORA É CINZA */
 #btnSalvar {
-  background-color: #555 !important; /* Fundo cinza */
+  background-color: #555 !important; /* Inicia Cinza */
   color: #222 !important;            /* Texto cinza escuro */
   border: none !important;
   padding: 10px 30px;
   border-radius: 4px;
   font-weight: bold;
-  cursor: not-allowed;               /* Cursor de "proibido" */
+  cursor: not-allowed;
   text-transform: uppercase;
   transition: 0.3s;
   opacity: 0.6;
 }
 
-/* ESTADO ATIVO: VERMELHO (Quando o formulário está preenchido) */
+/* SÓ FICA VERMELHO QUANDO O JS ADICIONAR A CLASSE .ativo */
 #btnSalvar.ativo {
-  background-color: #8b0000 !important; /* Vermelho escuro */
+  background-color: #8b0000 !important; /* Vermelho */
   color: #ffffff !important;            /* Texto branco */
-  cursor: pointer;                      /* Cursor de clique */
+  cursor: pointer;
   opacity: 1;
   box-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
 }
 
-/* Efeito de hover apenas quando estiver ativo */
+/* Efeito de brilho apenas quando estiver vermelho (ativo) */
 #btnSalvar.ativo:hover {
   background-color: #a00000 !important;
   transform: translateY(-1px);
@@ -95,13 +95,8 @@ input, select, textarea {
 
 /* ============================================================ */
 
-/* Ajuste para o formulário no mobile ou telas menores */
+/* Ajuste Mobile */
 @media (max-width: 768px) {
-  .sidebar-nova {
-    width: 60px;
-  }
-  .main-content {
-    margin-left: 60px;
-    padding: 15px;
-  }
+  .sidebar-nova { width: 60px; }
+  .main-content { margin-left: 60px; padding: 15px; }
 }
