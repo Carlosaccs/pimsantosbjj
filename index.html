@@ -38,14 +38,15 @@
         /* BARRA DE NAVEGAÇÃO E BOTÃO SALVAR */
         .tab-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Garante espaço entre abas e botão */
             align-items: center;
             margin-bottom: 25px;
             border-bottom: 1px solid #333;
             padding-bottom: 15px;
+            width: 100%;
         }
 
-        .tabs-wrapper { display: flex; gap: 10px; }
+        .tabs-wrapper { display: flex; gap: 10px; flex-grow: 1; }
 
         .tab-button {
             background: #2d2d2d; color: #888; border: 1px solid #444; padding: 10px 18px;
@@ -53,18 +54,18 @@
         }
         .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* ESTILO DO BOTÃO SALVAR NO TOPO */
         .btn-salvar {
             background-color: var(--vermelho-block);
             color: #888;
             border: 1px solid #444;
-            padding: 10px 30px;
+            padding: 10px 35px;
             cursor: not-allowed;
             text-transform: uppercase;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             border-radius: 4px;
             transition: 0.3s;
+            margin-left: 20px; /* Afasta das abas */
         }
 
         .btn-salvar.ativo {
@@ -88,30 +89,35 @@
             <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 120px; height: auto;">
             <div style="font-family:'Big Shoulders Display' !important; font-size: 1.6rem; margin-top:10px; color: #fff;">PIM SANTOS BJJ</div>
         </div>
+        
         <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
+        
         <div class="nav-label">Gestão de Alunos</div>
         <div class="nav-item" onclick="abrirAluno(this)">Prontuário do Aluno</div>
+        
         <div class="nav-label">Cadastros</div>
         <div class="nav-item" onclick="abrirCadastro('professor', this)">Professores</div>
     </nav>
 
     <main>
-        <section id="secao-aluno" class="section-content">
-            <h2 id="nome-aluno-titulo">ALUNO</h2>
+        <section id="dashboard" class="section-content active">
+            <h2>Visão Geral</h2>
+            <div class="form-card"><p style="color: #666;">Painel de indicadores em desenvolvimento.</p></div>
+        </section>
+
+        <section id="secao-registro" class="section-content">
+            <h2 id="titulo-central">ALUNO</h2>
             <div class="tab-container">
-                <div class="tabs-wrapper">
+                <div id="wrapper-abas" class="tabs-wrapper">
                     <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">Cadastro</div>
                     <div class="tab-button" onclick="mudarSubAba('presenca', this)">Presença</div>
                     <div class="tab-button" onclick="mudarSubAba('nivel', this)">Nível/Faixa</div>
                 </div>
                 <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>SALVAR</button>
             </div>
-            <div class="form-card"><div id="container-aluno-content"></div></div>
-        </section>
-
-        <section id="outros-cadastros" class="section-content">
-            <h2 id="titulo-outros">CADASTRO</h2>
-            <div class="form-card"><div id="container-outros"></div></div>
+            <div class="form-card">
+                <div id="container-iframe"></div>
+            </div>
         </section>
     </main>
 
@@ -121,27 +127,43 @@
         function showSection(id, element) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            
+            const secao = document.getElementById(id);
+            if(secao) secao.classList.add('active');
             if(element) element.classList.add('active');
+            
+            // Sempre que mudar de seção principal, reseta o botão salvar
+            validarFormulario(false);
         }
 
         function abrirAluno(element) {
-            showSection('secao-aluno', element);
+            document.getElementById('titulo-central').innerText = "PRONTUÁRIO DO ALUNO";
+            document.getElementById('wrapper-abas').style.display = "flex"; // Mostra as abas
+            showSection('secao-registro', element);
             mudarSubAba('cadastro', document.querySelector('.tab-button'));
+        }
+
+        function abrirCadastro(tipo, element) {
+            if (tipo === 'professor') {
+                document.getElementById('titulo-central').innerText = "CADASTRO DE PROFESSOR";
+                document.getElementById('wrapper-abas').style.display = "none"; // Esconde abas de aluno
+                showSection('secao-registro', element);
+                document.getElementById('container-iframe').innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:800px;"></iframe>`;
+            }
         }
 
         function mudarSubAba(tipo, element) {
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-            element.classList.add('active');
-            const container = document.getElementById('container-aluno-content');
+            if(element) element.classList.add('active');
+            
+            const container = document.getElementById('container-iframe');
             if(tipo === 'cadastro') {
-                container.innerHTML = `<iframe id="frameCadastro" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
+                container.innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:800px;"></iframe>`;
             } else {
-                container.innerHTML = `<div style="padding:50px; text-align:center;">Módulo em desenvolvimento.</div>`;
+                container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em breve.</div>`;
             }
         }
 
-        // COMUNICAÇÃO COM O IFRAME
         function validarFormulario(estaValido) {
             const btn = document.getElementById('btnSalvarGlobal');
             if (estaValido) {
@@ -154,7 +176,7 @@
         }
 
         function dispararSalvamento() {
-            const iframe = document.querySelector('#container-aluno-content iframe');
+            const iframe = document.getElementById('framePrincipal');
             if (iframe) iframe.contentWindow.postMessage('executarSalvar', '*');
         }
 
