@@ -147,7 +147,23 @@
 
     <script>
         const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
-
+    
+        // 1. MÁSCARA DE CPF PARA O CAMPO DE BUSCA
+        // Adicionamos um carregamento para garantir que o campo existe antes de aplicar a máscara
+        window.onload = function() {
+            const inputBuscaCPF = document.getElementById('buscaCPF');
+            if (inputBuscaCPF) {
+                inputBuscaCPF.addEventListener('input', function(e) {
+                    let v = e.target.value.replace(/\D/g, ""); // Remove letras
+                    if (v.length > 11) v = v.slice(0, 11);
+                    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                    e.target.value = v;
+                });
+            }
+        };
+    
         function showSection(id, element) {
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -155,14 +171,14 @@
             if(secao) secao.classList.add('active');
             if(element) element.classList.add('active');
         }
-
+    
         function abrirAluno(element) {
             document.getElementById('titulo-central').innerText = "PRONTUÁRIO DO ALUNO";
             document.getElementById('wrapper-abas').style.display = "flex"; 
             showSection('secao-registro', element);
             mudarSubAba('cadastro', document.querySelector('.tab-button'));
         }
-
+    
         function mudarSubAba(tipo, element) {
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             if(element) element.classList.add('active');
@@ -173,33 +189,69 @@
                 container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em breve.</div>`;
             }
         }
-
-        // LÓGICA DE BUSCA
+    
+        // 2. LÓGICA DE BUSCA REAL
         function limparBusca() {
             document.getElementById('buscaNome').value = "";
             document.getElementById('buscaCPF').value = "";
             document.getElementById('btnWhatsEvolucao').style.display = "none";
             mudarSubAba('cadastro', document.querySelector('.tab-button')); // Reseta o formulário
         }
-
+    
         function buscarDadosAluno() {
-            const nome = document.getElementById('buscaNome').value;
-            const cpf = document.getElementById('buscaCPF').value;
+            const nome = document.getElementById('buscaNome').value.trim().toUpperCase();
+            const cpf = document.getElementById('buscaCPF').value.trim();
             
             if(!nome && !cpf) {
                 alert("Digite um nome ou CPF para buscar.");
                 return;
             }
-
-            // Aqui o JS enviará o comando para o Google Script buscar os dados
-            console.log("Buscando aluno:", nome || cpf);
-            // Simulação: Após encontrar, mostramos o botão de WhatsApp
-            document.getElementById('btnWhatsEvolucao').style.display = "block";
+    
+            console.log("Iniciando busca no banco de dados...");
+    
+            // Chama a função que criamos no Google Apps Script (Código.gs)
+            google.script.run
+                .withSuccessHandler(finalizarBusca)
+                .buscarAlunoNoSheets(nome, cpf);
         }
-
+    
+        // 3. RECEBENDO OS DADOS DA PLANILHA
+        function finalizarBusca(aluno) {
+            if (!aluno) {
+                alert("Aluno não encontrado na base de dados.");
+                return;
+            }
+    
+            // Mostra o botão de WhatsApp e guarda o link de acesso nele (se existir)
+            const btnWhats = document.getElementById('btnWhatsEvolucao');
+            btnWhats.style.display = "block";
+            if (aluno.Link_De_Acesso) {
+                btnWhats.setAttribute('data-link', aluno.Link_De_Acesso);
+                btnWhats.setAttribute('data-whats', aluno.Aluno_WhatsApp);
+            }
+    
+            // Envia os dados para o iFrame preencher os campos automaticamente
+            const iframe = document.getElementById('framePrincipal');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({
+                    tipo: 'PREENCHER_FORMULARIO',
+                    dados: aluno
+                }, '*');
+            }
+        }
+    
         function enviarWhatsEvolucao() {
-            alert("Gerando link de evolução e abrindo WhatsApp...");
-            // Lógica do Link_De_Acesso entrará aqui
+            const btn = document.getElementById('btnWhatsEvolucao');
+            const link = btn.getAttribute('data-link');
+            const fone = btn.getAttribute('data-whats');
+    
+            if (!link) {
+                alert("Este aluno ainda não possui um link de evolução gerado.");
+                return;
+            }
+    
+            const mensagem = encodeURIComponent(`Olá! Veja aqui como está sua evolução no Jiu-Jitsu: ${link}`);
+            window.open(`https://wa.me/${fone}?text=${mensagem}`, '_blank');
         }
     </script>
 </body>
