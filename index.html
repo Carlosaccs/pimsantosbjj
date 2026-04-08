@@ -81,6 +81,15 @@
         }
         
         iframe { width: 100%; border: none; background: transparent; }
+        
+        /* Força maiúsculas nos campos de nome e busca */
+            #buscaNome, #buscaCPF, input[type="text"] {
+                text-transform: uppercase;
+            }
+            /* Garante que o placeholder não seja afetado se desejar */
+            ::placeholder {
+                text-transform: none;
+            }
     </style>
 </head>
 <body>
