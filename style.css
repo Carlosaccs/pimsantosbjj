@@ -1,16 +1,9 @@
 /* 1. CONFIGURAÇÕES GERAIS */
-* {
-  font-family: 'Roboto', sans-serif !important;
-  box-sizing: border-box;
-}
+* { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
 
-body {
-  background-color: #1a1a1a !important;
-  display: flex !important;
-  margin: 0 !important;
-  color: white;
-}
+body { background-color: #1a1a1a !important; display: flex !important; margin: 0 !important; color: white; padding: 15px; }
 
+/* Esconde nav se estiver dentro do iframe */
 nav { display: none !important; }
 
 /* 2. CAMPOS DO FORMULÁRIO */
@@ -18,58 +11,32 @@ nav { display: none !important; }
   border: 1px solid #b8860b !important;
   background: #000 !important;
   border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 5px;
 }
 
 .field-box label {
   color: #b8860b !important;
-  font-size: 11px;
-  font-weight: bold;
-  display: block;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; white-space: nowrap;
 }
 
 input, select, textarea {
-  background: transparent !important;
-  color: white !important;
-  border: none !important;
-  width: 100%;
-  outline: none !important;
-  text-transform: uppercase;
+  background: transparent !important; color: #fff !important; border: none !important;
+  font-size: 14px; outline: none; width: 100%; text-transform: uppercase;
 }
 
-/* 3. LOGICA DO BOTÃO SALVAR (O conflito era aqui no ID) */
-
-/* PADRÃO: CINZA (Bloqueado) */
-#btnSalvarGlobal {
-  background-color: #444 !important; /* Cinza chumbo */
-  color: #888 !important;            /* Texto apagado */
-  border: 1px solid #555 !important;
-  padding: 10px 30px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: not-allowed;
-  text-transform: uppercase;
-  transition: 0.3s ease;
-  opacity: 0.7;
+/* Autocomplete fix */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #000 inset !important;
+  -webkit-text-fill-color: #fff !important;
 }
 
-/* ESTADO ATIVO: VERMELHO VIVA (Liberado pelo JS) */
-/* Cor padrão do botão (Desativado) */
-#btnSalvarGlobal {
-  background-color: #444 !important;
-  color: #888 !important;
-  cursor: not-allowed !important;
-  opacity: 0.7 !important;
-  border: none !important;
-  transition: 0.3s;
-}
+.grid-principal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+#container-logica-resp { grid-column: span 4; display: none; }
+.check-container { grid-column: span 4; display: flex; align-items: center; gap: 10px; margin: 15px 0 5px 0; color: #f39c12; font-size: 12px; font-weight: bold; }
+.titulo-secao { grid-column: span 4; color: #f39c12; font-size: 11px; font-weight: bold; margin: 10px 0; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
-/* Cor quando ele ganha a classe 'aceso' */
-#btnSalvarGlobal.aceso {
-  background-color: #b30000 !important; /* Vermelho vivo */
-  color: #ffffff !important;
-  cursor: pointer !important;
-  opacity: 1 !important;
-  box-shadow: 0 0 15px rgba(179, 0, 0, 0.6) !important;
-}
+.span-3 { grid-column: span 3; }
+.span-2 { grid-column: span 2; }
+.span-4 { grid-column: span 4; }
