@@ -55,16 +55,21 @@ input, select, textarea {
 }
 
 /* ESTADO ATIVO: VERMELHO VIVA (Liberado pelo JS) */
-#btnSalvarGlobal.ativo {
-  background-color: #b30000 !important; /* Seu vermelho-viva */
-  color: #ffffff !important;
-  border: 1px solid #ff0000 !important;
-  cursor: pointer;
-  opacity: 1;
-  box-shadow: 0 0 12px rgba(179, 0, 0, 0.5);
+/* Cor padrão do botão (Desativado) */
+#btnSalvarGlobal {
+  background-color: #444 !important;
+  color: #888 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+  border: none !important;
+  transition: 0.3s;
 }
 
-#btnSalvarGlobal.ativo:hover {
-  background-color: #ff0000 !important;
-  transform: translateY(-1px);
+/* Cor quando ele ganha a classe 'aceso' */
+#btnSalvarGlobal.aceso {
+  background-color: #b30000 !important; /* Vermelho vivo */
+  color: #ffffff !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 15px rgba(179, 0, 0, 0.6) !important;
 }
