@@ -1,12 +1,19 @@
 /* 1. CONFIGURAÇÕES GERAIS */
 * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
 
-body { background-color: #1a1a1a !important; display: flex !important; margin: 0 !important; color: white; padding: 15px; }
+body { 
+  background-color: #1a1a1a !important; 
+  margin: 0 !important; 
+  color: white; 
+  padding: 15px;
+}
 
-/* Esconde nav se estiver dentro do iframe */
+/* Esconde a navegação se o arquivo for aberto dentro do iframe */
 nav { display: none !important; }
 
-/* 2. CAMPOS DO FORMULÁRIO */
+/* 2. CAMPOS DO FORMULÁRIO (Visual do Prontuário) */
+.grid-principal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
 .field-box {
   border: 1px solid #b8860b !important;
   background: #000 !important;
@@ -26,17 +33,31 @@ input, select, textarea {
   font-size: 14px; outline: none; width: 100%; text-transform: uppercase;
 }
 
-/* Autocomplete fix */
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px #000 inset !important;
-  -webkit-text-fill-color: #fff !important;
-}
-
-.grid-principal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-#container-logica-resp { grid-column: span 4; display: none; }
-.check-container { grid-column: span 4; display: flex; align-items: center; gap: 10px; margin: 15px 0 5px 0; color: #f39c12; font-size: 12px; font-weight: bold; }
-.titulo-secao { grid-column: span 4; color: #f39c12; font-size: 11px; font-weight: bold; margin: 10px 0; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 5px; }
-
+/* Ajuste para telas menores */
 .span-3 { grid-column: span 3; }
 .span-2 { grid-column: span 2; }
 .span-4 { grid-column: span 4; }
+
+/* 3. LÓGICA DO BOTÃO SALVAR (No Index) */
+#btnSalvarGlobal {
+  background-color: #444 !important;
+  color: #888 !important;
+  border: 1px solid #555 !important;
+  padding: 10px 35px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: not-allowed !important;
+  text-transform: uppercase;
+  transition: 0.3s ease;
+  opacity: 0.7;
+}
+
+/* Quando o botão ganha a classe .ativo via JavaScript */
+#btnSalvarGlobal.ativo {
+  background-color: #b30000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff0000 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 15px rgba(179, 0, 0, 0.6) !important;
+}
