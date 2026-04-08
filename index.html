@@ -115,20 +115,28 @@
         <section id="secao-registro" class="section-content" style="max-width: 1000px; margin-left: 20px;">
             <h2 id="titulo-central">PRONTUÁRIO DO ALUNO</h2>
 
-            <div class="search-bar">
-                <div class="search-field">
-                    <label>Buscar por Nome:</label>
-                    <input type="text" id="buscaNome" list="listaAlunos" placeholder="Digite o nome...">
-                    <datalist id="listaAlunos"></datalist>
-                </div>
-                <div class="search-field" style="max-width: 180px;">
-                    <label>Buscar por CPF:</label>
-                    <input type="text" id="buscaCPF" placeholder="000.000.000-00">
-                </div>
-                <button class="btn-acao" onclick="buscarDadosAluno()">Buscar</button>
-                <button class="btn-acao" onclick="limparBusca()" style="background:#444;">Novo</button>
-                <button id="btnWhatsEvolucao" class="btn-acao btn-whats" onclick="enviarWhatsEvolucao()">WhatsApp Evolução</button>
+        <div class="search-bar">
+            <div class="search-field">
+                <label>Buscar por Nome:</label>
+                <input type="text" id="buscaNome" placeholder="Digite o nome...">
             </div>
+            <div class="search-field" style="max-width: 150px;">
+                <label>Buscar por CPF:</label>
+                <input type="text" id="buscaCPF" placeholder="000.000.000-00">
+            </div>
+            
+            <div style="display: flex; gap: 5px;">
+                <button class="btn-acao" onclick="buscarDadosAluno()">BUSCAR</button>
+                <div id="controlesNavegacao" style="display: none; gap: 5px;">
+                    <button class="btn-acao" onclick="navegarResultados(-1)"> < </button>
+                    <span id="infoResultados" style="color: var(--primary); font-weight: bold; align-self: center; font-size: 12px;">1/1</span>
+                    <button class="btn-acao" onclick="navegarResultados(1)"> > </button>
+                </div>
+                <button class="btn-acao" onclick="limparBusca()" style="background:#444;">NOVO</button>
+            </div>
+            
+            <button id="btnWhatsEvolucao" class="btn-acao btn-whats" onclick="enviarWhatsEvolucao()">WhatsApp Evolução</button>
+        </div>
 
             <div class="tab-container">
                 <div id="wrapper-abas" class="tabs-wrapper">
