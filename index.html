@@ -15,7 +15,7 @@
             --bg-active: #3d3d3d; 
             --text-light: #e0e0e0; 
             --sidebar-width: 260px; 
-            --vermelho-block: #5a0000;
+            --vermelho-block: #444;
             --vermelho-viva: #b30000;
         }
 
@@ -36,13 +36,8 @@
         h2 { font-family: 'Big Shoulders Display', sans-serif !important; font-size: 2.5rem; color: #fff; margin-bottom: 20px; text-transform: uppercase; }
 
         .tab-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-            width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; width: 100%;
         }
 
         .tabs-wrapper { display: flex; gap: 10px; flex-grow: 1; }
@@ -53,10 +48,11 @@
         }
         .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+        /* ESTILO DO BOTÃO SALVAR */
         .btn-salvar {
             background-color: var(--vermelho-block);
             color: #888;
-            border: 1px solid #444;
+            border: 1px solid #555;
             padding: 10px 35px;
             cursor: not-allowed;
             text-transform: uppercase;
@@ -64,29 +60,25 @@
             font-size: 0.85rem;
             border-radius: 4px;
             transition: 0.3s;
-            margin-left: 20px;
+            opacity: 0.7;
         }
 
         .btn-salvar.ativo {
-            background-color: var(--vermelho-viva);
-            color: white;
-            cursor: pointer;
-            border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(179, 0, 0, 0.4);
+            background-color: var(--vermelho-viva) !important;
+            color: white !important;
+            cursor: pointer !important;
+            border-color: #ff0000 !important;
+            opacity: 1 !important;
+            box-shadow: 0 0 15px rgba(179, 0, 0, 0.5);
         }
 
         .section-content { display: none; }
         .section-content.active { display: block; }
         
-        /* AJUSTE AQUI: min-height adicionado para garantir que o card cubra o formulário expandido */
         .form-card { 
-            background: var(--bg-card); 
-            padding: 20px; 
-            border-radius: 4px; 
-            border-top: 4px solid var(--primary); 
-            max-width: 1100px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-            min-height: 1180px; 
+            background: var(--bg-card); padding: 20px; border-radius: 4px; 
+            border-top: 4px solid var(--primary); max-width: 1100px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); min-height: 1180px; 
         }
         
         iframe { width: 100%; border: none; background: transparent; }
@@ -99,12 +91,9 @@
             <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 120px; height: auto;">
             <div style="font-family:'Big Shoulders Display' !important; font-size: 1.6rem; margin-top:10px; color: #fff;">PIM SANTOS BJJ</div>
         </div>
-        
         <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
-        
         <div class="nav-label">Gestão de Alunos</div>
         <div class="nav-item" onclick="abrirAluno(this)">Prontuário do Aluno</div>
-        
         <div class="nav-label">Cadastros</div>
         <div class="nav-item" onclick="abrirCadastro('professor', this)">Professores</div>
     </nav>
@@ -116,23 +105,18 @@
         </section>
 
         <section id="secao-registro" class="section-content" style="max-width: 1000px; margin-left: 20px;">
-            <h2 id="titulo-central" style="margin-left: 0;">PRONTUÁRIO DO ALUNO</h2>
-            
-            <div class="tab-container" style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; margin-bottom: 10px;">
-                <div id="wrapper-abas" class="tabs-wrapper" style="display: flex; gap: 5px;">
+            <h2 id="titulo-central">PRONTUÁRIO DO ALUNO</h2>
+            <div class="tab-container">
+                <div id="wrapper-abas" class="tabs-wrapper">
                     <div class="tab-button active" onclick="mudarSubAba('cadastro', this)">CADASTRO</div>
                     <div class="tab-button" onclick="mudarSubAba('presenca', this)">PRESENÇA</div>
                     <div class="tab-button" onclick="mudarSubAba('nivel', this)">NÍVEL/FAIXA</div>
                     <div class="tab-button" onclick="mudarSubAba('evolucao', this)">EVOLUÇÃO</div>
                     <div class="tab-button" onclick="mudarSubAba('saude', this)">SAÚDE</div>
                 </div>
-                
-                <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>
-                    SALVAR
-                </button>
+                <button id="btnSalvarGlobal" class="btn-salvar" onclick="dispararSalvamento()" disabled>SALVAR</button>
             </div>
-        
-            <div class="form-card" style="width: 100%; border-top: 2px solid #b8860b; padding-top: 15px;">
+            <div class="form-card">
                 <div id="container-iframe"></div>
             </div>
         </section>
@@ -144,11 +128,9 @@
         function showSection(id, element) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            
             const secao = document.getElementById(id);
             if(secao) secao.classList.add('active');
             if(element) element.classList.add('active');
-            
             validarFormulario(false);
         }
 
@@ -164,19 +146,16 @@
                 document.getElementById('titulo-central').innerText = "CADASTRO DE PROFESSOR";
                 document.getElementById('wrapper-abas').style.display = "none";
                 showSection('secao-registro', element);
-                // Altura aumentada para 1150px
-                document.getElementById('container-iframe').innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:1150px; border:none; background:transparent;"></iframe>`;
+                document.getElementById('container-iframe').innerHTML = `<iframe id="framePrincipal" name="framePrincipal" src="${urlGoogle}?page=RegistroProfessores" style="width:100%; height:1150px; border:none;"></iframe>`;
             }
         }
         
         function mudarSubAba(tipo, element) {
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             if(element) element.classList.add('active');
-            
             const container = document.getElementById('container-iframe');
             if(tipo === 'cadastro') {
-                // AJUSTE: Altura aumentada para 1150px para evitar cortes
-                container.innerHTML = `<iframe id="framePrincipal" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:1150px; border:none; background:transparent;"></iframe>`;
+                container.innerHTML = `<iframe id="framePrincipal" name="framePrincipal" src="${urlGoogle}?page=RegistroAlunos" style="width:100%; height:1150px; border:none;"></iframe>`;
             } else {
                 container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em breve.</div>`;
             }
@@ -195,12 +174,25 @@
 
         function dispararSalvamento() {
             const iframe = document.getElementById('framePrincipal');
-            if (iframe) iframe.contentWindow.postMessage('executarSalvar', '*');
+            if (iframe) {
+                iframe.contentWindow.postMessage('executarSalvar', '*');
+                const btn = document.getElementById('btnSalvarGlobal');
+                btn.innerText = "GRAVANDO...";
+                btn.disabled = true;
+            }
         }
 
         window.addEventListener('message', (event) => {
             if (event.data === 'formPronto') validarFormulario(true);
             if (event.data === 'formIncompleto') validarFormulario(false);
+            if (event.data === 'salvamentoOk') {
+                validarFormulario(false);
+                document.getElementById('btnSalvarGlobal').innerText = "SALVAR";
+            }
+            if (event.data === 'salvamentoErro') {
+                document.getElementById('btnSalvarGlobal').innerText = "SALVAR";
+                validarFormulario(true);
+            }
         });
     </script>
 </body>
