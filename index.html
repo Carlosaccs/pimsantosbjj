@@ -63,6 +63,7 @@
             opacity: 0.7;
         }
 
+        /* Classe que o JS vai adicionar para "acender" o botão */
         .btn-salvar.ativo {
             background-color: var(--vermelho-viva) !important;
             color: white !important;
@@ -161,37 +162,62 @@
             }
         }
 
+        // CONTROLADOR DO BOTÃO SALVAR
         function validarFormulario(estaValido) {
             const btn = document.getElementById('btnSalvarGlobal');
+            if (!btn) return;
+
             if (estaValido) {
-                btn.classList.add('ativo');
-                btn.disabled = false;
+                btn.classList.add('ativo');    // Ativa cor vermelha no CSS
+                btn.disabled = false;          // Habilita clique
             } else {
+                btn.classList.remove('ativo'); // Volta para cor chumbo
+                btn.disabled = true;           // Desabilita clique
+            }
+        }
+
+        // DISPARA O SALVAMENTO PARA DENTRO DO IFRAME
+        function dispararSalvamento() {
+            const iframe = document.getElementById('framePrincipal');
+            const btn = document.getElementById('btnSalvarGlobal');
+
+            if (iframe && iframe.contentWindow) {
+                // Envia sinal para o formulário (RegistroAlunos.html)
+                iframe.contentWindow.postMessage('executarSalvar', '*');
+                
+                // Muda o botão para estado de carregamento
+                btn.innerText = "GRAVANDO...";
                 btn.classList.remove('ativo');
                 btn.disabled = true;
             }
         }
 
-        function dispararSalvamento() {
-            const iframe = document.getElementById('framePrincipal');
-            if (iframe) {
-                iframe.contentWindow.postMessage('executarSalvar', '*');
-                const btn = document.getElementById('btnSalvarGlobal');
-                btn.innerText = "GRAVANDO...";
-                btn.disabled = true;
-            }
-        }
-
+        // ESCUTA AS MENSAGENS QUE VÊM DO FORMULÁRIO (IFRAME)
         window.addEventListener('message', (event) => {
-            if (event.data === 'formPronto') validarFormulario(true);
-            if (event.data === 'formIncompleto') validarFormulario(false);
+            const btn = document.getElementById('btnSalvarGlobal');
+
+            // Formulário avisou que campos obrigatórios estão OK
+            if (event.data === 'formPronto') {
+                validarFormulario(true);
+            }
+
+            // Formulário avisou que campos obrigatórios estão vazios
+            if (event.data === 'formIncompleto') {
+                validarFormulario(false);
+            }
+
+            // Google Sheets confirmou o salvamento
             if (event.data === 'salvamentoOk') {
                 validarFormulario(false);
-                document.getElementById('btnSalvarGlobal').innerText = "SALVAR";
+                btn.innerText = "SALVAR";
+                // Opcional: alert("Aluno cadastrado com sucesso!");
             }
+
+            // Google Sheets avisou que deu erro
             if (event.data === 'salvamentoErro') {
-                document.getElementById('btnSalvarGlobal').innerText = "SALVAR";
-                validarFormulario(true);
+                btn.innerText = "SALVAR";
+                validarFormulario(true); // Reativa o botão para tentar de novo
+                alert("Erro ao salvar. Verifique a conexão.");
             }
         });
     </script>
