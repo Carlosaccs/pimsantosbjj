@@ -32,20 +32,24 @@
         .nav-item:hover { color: #fff; background: var(--bg-hover); }
         .nav-item.active { background: var(--bg-active); color: #fff; border-left-color: var(--primary); }
         
-        main { flex-grow: 1; padding: 15px 40px; overflow-y: auto; background-color: var(--bg-chumbo); } /* Reduzi o padding de 40px para 15px */
+        main { flex-grow: 1; padding: 15px 40px; overflow-y: auto; background-color: var(--bg-chumbo); } 
         
+        /* CORREÇÃO DOS TÍTULOS INVASORES */
+        .section-content { display: none; } /* Esconde por padrão */
+        .section-content.active { display: block; } /* Só mostra o que for clicado */
+
         h2 { 
             font-family: 'Big Shoulders Display', sans-serif !important; 
             font-size: 2.5rem; color: #fff; 
-            margin-top: 0 !important; /* Encosta o título no topo */
+            margin-top: 0 !important; 
             margin-bottom: 15px; 
             text-transform: uppercase; 
         }
 
         .tab-container {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 0px; /* Removi a margem para colar na linha amarela */
-            border-bottom: none !important; /* ELIMINEI A LINHA CINZA */
+            margin-bottom: 0px; 
+            border-bottom: none !important; 
             padding-bottom: 5px; width: 100%;
         }
 
@@ -59,10 +63,10 @@
 
         .form-card { 
             background: var(--bg-card); padding: 20px; border-radius: 4px; 
-            border-top: 4px solid var(--primary); /* A LINHA AMARELA AGORA É O TOPO */
+            border-top: 4px solid var(--primary); 
             max-width: 1100px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); min-height: 1180px; 
-            margin-top: 5px; /* Ajuste fino para colar nos botões */
+            margin-top: 5px; 
         }
         
         iframe { width: 100%; border: none; background: transparent; }
@@ -85,7 +89,7 @@
     <main>
         <section id="dashboard" class="section-content active">
             <h2>Visão Geral</h2>
-            <div class="form-card" style="min-height: auto; border-top: none;"><p style="color: #666;">Painel de indicadores em desenvolvimento.</p></div>
+            <div class="form-card" style="min-height: auto;"><p style="color: #666;">Painel de indicadores em desenvolvimento.</p></div>
         </section>
 
         <section id="secao-registro" class="section-content" style="max-width: 1000px; margin-left: 20px;">
@@ -109,8 +113,10 @@
         const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
 
         function showSection(id, element) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            // Esconde todas as seções antes de mostrar a nova
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
             const secao = document.getElementById(id);
             if(secao) secao.classList.add('active');
             if(element) element.classList.add('active');
@@ -142,10 +148,6 @@
                 container.innerHTML = `<div style="padding:50px; text-align:center; color:#666;">Módulo de <b>${tipo.toUpperCase()}</b> em breve.</div>`;
             }
         }
-
-        window.addEventListener('message', (event) => {
-            // Lógica de comunicação mantida para quando você precisar do botão global
-        });
     </script>
 </body>
 </html>
