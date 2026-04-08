@@ -206,22 +206,58 @@
             mudarSubAba('cadastro', document.querySelector('.tab-button')); // Reseta o formulário
         }
     
-        function buscarDadosAluno() {
-            const nome = document.getElementById('buscaNome').value.trim().toUpperCase();
-            const cpf = document.getElementById('buscaCPF').value.trim();
-            
-            if(!nome && !cpf) {
-                alert("Digite um nome ou CPF para buscar.");
+let resultadosBusca = [];
+let indiceAtual = 0;
+
+function buscarDadosAluno() {
+    const nome = document.getElementById('buscaNome').value.trim().toUpperCase();
+    const cpf = document.getElementById('buscaCPF').value.trim();
+    
+    if(!nome && !cpf) {
+        alert("Digite um nome ou CPF.");
+        return;
+    }
+
+    google.script.run
+        .withSuccessHandler(function(alunos) {
+            if (!alunos || alunos.length === 0) {
+                alert("Nenhum registro encontrado.");
                 return;
             }
+            resultadosBusca = alunos;
+            indiceAtual = 0;
+            exibirResultado();
+        })
+        .buscarAlunoNoSheets(nome, cpf);
+}
+
+function exibirResultado() {
+    const aluno = resultadosBusca[indiceAtual];
     
-            console.log("Iniciando busca no banco de dados...");
+    // Atualiza o contador visual (ex: 1 de 3)
+    const controles = document.getElementById('controlesNavegacao');
+    const info = document.getElementById('infoResultados');
     
-            // Chama a função que criamos no Google Apps Script (Código.gs)
-            google.script.run
-                .withSuccessHandler(finalizarBusca)
-                .buscarAlunoNoSheets(nome, cpf);
-        }
+    if (resultadosBusca.length > 1) {
+        controles.style.display = "flex";
+        info.innerText = `${indiceAtual + 1} / ${resultadosBusca.length}`;
+    } else {
+        controles.style.display = "none";
+    }
+
+    // Envia para o iFrame
+    const iframe = document.getElementById('framePrincipal');
+    if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ tipo: 'PREENCHER_FORMULARIO', dados: aluno }, '*');
+    }
+}
+
+function navegarResultados(direcao) {
+    indiceAtual += direcao;
+    if (indiceAtual < 0) indiceAtual = resultadosBusca.length - 1;
+    if (indiceAtual >= resultadosBusca.length) indiceAtual = 0;
+    exibirResultado();
+}
     
         // 3. RECEBENDO OS DADOS DA PLANILHA
         function finalizarBusca(aluno) {
