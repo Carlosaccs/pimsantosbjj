@@ -146,7 +146,6 @@
     </main>
 
     <script>
-        // URL DO SEU GOOGLE APPS SCRIPT (Certifique-se de que é a URL de execução)
         const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
     
         window.onload = function() {
@@ -214,14 +213,12 @@
             btn.disabled = true;
 
             try {
-                // Chamada via fetch (correta para GitHub -> Google)
+                // Sincronizado com os parâmetros do code.gs por índice
                 const response = await fetch(`${urlGoogle}?action=buscar&nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpf)}`);
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
                     alert("Nenhum registro encontrado.");
-                    btn.innerText = "BUSCAR";
-                    btn.disabled = false;
                     return;
                 }
 
@@ -231,7 +228,7 @@
 
             } catch (err) {
                 console.error(err);
-                alert("Erro ao conectar com o servidor. Verifique se o Script está publicado como 'Qualquer pessoa'.");
+                alert("Erro ao conectar com o servidor.");
             } finally {
                 btn.innerText = "BUSCAR";
                 btn.disabled = false;
@@ -251,15 +248,17 @@
                 controles.style.display = "none";
             }
 
-            // Exibe WhatsApp se tiver número
+            // Atualiza exibição do WhatsApp
             if(aluno.Aluno_WhatsApp) {
                 btnWhats.style.display = "block";
                 btnWhats.setAttribute('data-whats', aluno.Aluno_WhatsApp);
-                btnWhats.setAttribute('data-link', aluno.Link_De_Acesso || "");
+            } else {
+                btnWhats.style.display = "none";
             }
 
             const iframe = document.getElementById('framePrincipal');
             if (iframe && iframe.contentWindow) {
+                // Envia a mensagem com os dados mapeados no code.gs
                 iframe.contentWindow.postMessage({ tipo: 'PREENCHER_FORMULARIO', dados: aluno }, '*');
             }
         }
@@ -273,11 +272,10 @@
 
         function enviarWhatsEvolucao() {
             const btn = document.getElementById('btnWhatsEvolucao');
-            const link = btn.getAttribute('data-link');
             const fone = btn.getAttribute('data-whats');
-            if (!link) { alert("Link não disponível."); return; }
-            const msg = encodeURIComponent(`Olá! Veja aqui sua evolução: ${link}`);
-            window.open(`https://wa.me/${fone}?text=${msg}`, '_blank');
+            if (!fone) { alert("Número não disponível."); return; }
+            const msg = encodeURIComponent(`Olá! Estou entrando em contato sobre sua evolução no jiu-jitsu.`);
+            window.open(`https://wa.me/${fone.replace(/\D/g, "")}?text=${msg}`, '_blank');
         }
     </script>
 </body>
