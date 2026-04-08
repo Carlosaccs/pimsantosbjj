@@ -1,4 +1,4 @@
-/* 1. CONFIGURAÇÕES GERAIS E FONTES */
+/* 1. CONFIGURAÇÕES GERAIS */
 * {
   font-family: 'Roboto', sans-serif !important;
   box-sizing: border-box;
@@ -11,31 +11,9 @@ body {
   color: white;
 }
 
-/* 2. OCULTA ELEMENTOS ANTIGOS DO SISTEMA */
-nav {
-  display: none !important;
-}
+nav { display: none !important; }
 
-/* 3. ESTRUTURA DA SIDEBAR E CONTEÚDO PRINCIPAL */
-.sidebar-nova {
-  width: 250px;
-  background: #000 !important;
-  height: 100vh;
-  border-right: 2px solid #b8860b;
-  display: flex !important;
-  flex-direction: column;
-  position: fixed;
-  z-index: 9999;
-}
-
-.main-content {
-  margin-left: 250px;
-  padding: 40px;
-  width: 100%;
-  background: #1a1a1a !important;
-}
-
-/* 4. ESTILIZAÇÃO DOS CAMPOS (BORDA DOURADA) */
+/* 2. CAMPOS DO FORMULÁRIO */
 .field-box {
   border: 1px solid #b8860b !important;
   background: #000 !important;
@@ -60,39 +38,33 @@ input, select, textarea {
   text-transform: uppercase;
 }
 
-/* 5. LOGICA DE COR DO BOTÃO SALVAR (ID: btnSalvar) */
+/* 3. LOGICA DO BOTÃO SALVAR (O conflito era aqui no ID) */
 
-/* PADRÃO: CINZA (Formulário incompleto) */
-#btnSalvar {
-  background-color: #555 !important;
-  color: #222 !important; /* Texto cinza escuro para parecer desabilitado */
-  border: none !important;
+/* PADRÃO: CINZA (Bloqueado) */
+#btnSalvarGlobal {
+  background-color: #444 !important; /* Cinza chumbo */
+  color: #888 !important;            /* Texto apagado */
+  border: 1px solid #555 !important;
   padding: 10px 30px;
   border-radius: 4px;
   font-weight: bold;
   cursor: not-allowed;
   text-transform: uppercase;
   transition: 0.3s ease;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
-/* ESTADO ATIVO: VERMELHO (Formulário preenchido) */
-#btnSalvar.ativo {
-  background-color: #8b0000 !important;
+/* ESTADO ATIVO: VERMELHO VIVA (Liberado pelo JS) */
+#btnSalvarGlobal.ativo {
+  background-color: #b30000 !important; /* Seu vermelho-viva */
   color: #ffffff !important;
+  border: 1px solid #ff0000 !important;
   cursor: pointer;
   opacity: 1;
-  box-shadow: 0 0 12px rgba(139, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(179, 0, 0, 0.5);
 }
 
-/* Efeito ao passar o mouse quando estiver ativo */
-#btnSalvar.ativo:hover {
-  background-color: #a00000 !important;
+#btnSalvarGlobal.ativo:hover {
+  background-color: #ff0000 !important;
   transform: translateY(-1px);
-}
-
-/* 6. RESPONSIVIDADE PARA TELAS MENORES */
-@media (max-width: 768px) {
-  .sidebar-nova { width: 60px; }
-  .main-content { margin-left: 60px; padding: 15px; }
 }
