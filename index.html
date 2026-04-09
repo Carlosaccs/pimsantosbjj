@@ -73,85 +73,76 @@
             </div>
         </section>
     </main>
-    <script>
-        const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
-        let todosAlunos = [];
+<script>
+    const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
+    let todosAlunos = [];
 
-        function showSection(id, element) {
-            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(element) element.classList.add('active');
-        }
+    function showSection(id, element) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(element) element.classList.add('active');
+    }
 
-        async function abrirProntuario(element) {
-            showSection('secao-registro', element);
-            if (todosAlunos.length === 0) { await buscarListaAlunos(); }
-        }
+    async function abrirProntuario(element) {
+        showSection('secao-registro', element);
+        if (todosAlunos.length === 0) { await buscarListaAlunos(); }
+    }
 
-        async function buscarListaAlunos() {
-            try {
-                const response = await fetch(`${urlGoogle}?action=listarTodos`);
-                const dadosRaw = await response.json();
-                // Filtra para não mostrar linhas vazias da planilha
-                todosAlunos = dadosRaw.filter(aluno => aluno.Aluno_Nome && aluno.Aluno_Nome.trim() !== "");
-                renderizarLista(todosAlunos);
-            } catch (err) { 
-                console.error("Erro ao buscar alunos", err); 
-            }
-        }
+    async function buscarListaAlunos() {
+        try {
+            const response = await fetch(`${urlGoogle}?action=listarTodos`);
+            const dadosRaw = await response.json();
+            todosAlunos = dadosRaw.filter(aluno => aluno.Aluno_Nome && aluno.Aluno_Nome.trim() !== "");
+            renderizarLista(todosAlunos);
+        } catch (err) { console.error("Erro ao buscar alunos", err); }
+    }
 
-        function renderizarLista(dados) {
-            const container = document.getElementById('listaAlunos');
-            container.innerHTML = ""; // Limpa a lista antes de preencher
+    // FUNÇÃO QUE CRIA A LISTA VISUAL
+    function renderizarLista(dados) {
+        const container = document.getElementById('listaAlunos');
+        container.innerHTML = "";
+        
+        dados.forEach(aluno => {
+            const card = document.createElement('div');
+            card.className = "aluno-card";
+            card.innerText = aluno.Aluno_Nome;
             
-            dados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = "aluno-card";
-                card.innerText = aluno.Aluno_Nome; // Usa o nome da sua tabela
+            card.onclick = () => {
+                document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+                card.classList.add('selecionado');
                 
-                // O CLIQUE TEM QUE FICAR AQUI:
-                card.onclick = () => {
-                    // 1. Marca visualmente qual aluno foi clicado
-                    document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-                    card.classList.add('selecionado');
-                    
-                    // 2. Envia os dados para o formulário central
-                    const iframe = document.getElementById('framePrincipal');
-                    if (iframe && iframe.contentWindow) {
-                        iframe.contentWindow.postMessage({ 
-                            tipo: 'PREENCHER_FORMULARIO', 
-                            dados: aluno 
-                        }, '*');
-                    }
-                };
-                container.appendChild(card);
-            });
-        }
+                // MANDA OS DADOS PARA O FORMULÁRIO
+                const iframe = document.getElementById('framePrincipal');
+                if (iframe && iframe.contentWindow) {
+                    iframe.contentWindow.postMessage({ 
+                        tipo: 'PREENCHER_FORMULARIO', 
+                        dados: aluno 
+                    }, '*');
+                }
+            };
+            container.appendChild(card);
+        });
+    }
 
-        function filtrarLista() {
-            // 1. Pega o que o usuário digitou e transforma em MAIÚSCULO
-            const termo = document.getElementById('inputBusca').value.toUpperCase();
-            
-            // 2. Filtra a lista original (todosAlunos) baseada no nome
-            const filtrados = todosAlunos.filter(aluno => {
-                const nome = aluno.Aluno_Nome ? aluno.Aluno_Nome.toUpperCase() : "";
-                return nome.includes(termo);
-            });
-            
-            // 3. Manda desenhar apenas os alunos que passaram no filtro
-            renderizarLista(filtrados);
-        }
+    // FUNÇÃO DE FILTRO (BUSCA)
+    function filtrarLista() {
+        const termo = document.getElementById('inputBusca').value.toUpperCase();
+        const filtrados = todosAlunos.filter(aluno => 
+            (aluno.Aluno_Nome || "").toUpperCase().includes(termo)
+        );
+        renderizarLista(filtrados);
+    }
 
-        function limparParaNovo() {
-            document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-            const iframe = document.getElementById('framePrincipal');
-            iframe.src = iframe.src; 
-        }
+    function limparParaNovo() {
+        document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+        const iframe = document.getElementById('framePrincipal');
+        iframe.src = iframe.src; 
+    }
 
-        function executarSalvar() {
-            document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
-        }
-    </script>
+    function executarSalvar() {
+        document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
+    }
+</script>
 </body>
 </html>
