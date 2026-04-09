@@ -9,118 +9,68 @@
         :root { --primary: #b8860b; --bg-chumbo: #1a1a1a; --bg-sidebar: #1a1a1a; --bg-card: #111111; --bg-hover: #2d2d2d; --bg-active: #3d3d3d; --text-light: #e0e0e0; --sidebar-width: 260px; }
         * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
         body { background-color: var(--bg-chumbo); color: var(--text-light); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR */
         nav { width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 2px solid var(--primary); display: flex; flex-direction: column; padding: 10px 0; flex-shrink: 0; overflow-y: auto; }
         .nav-item { padding: 12px 25px; cursor: pointer; text-transform: uppercase; font-weight: 700; font-size: 0.85rem; border-left: 5px solid transparent; color: #888; transition: 0.3s; }
         .nav-item:hover { color: #fff; background: var(--bg-hover); }
         .nav-item.active { background: var(--bg-active); color: #fff; border-left-color: var(--primary); }
-        main { flex-grow: 1; padding: 10px 20px; overflow-y: auto; background-color: var(--bg-chumbo); } 
-        .section-content { display: none; height: 100%; }
-        .section-content.active { display: block; }
+        
+        /* ÁREA PRINCIPAL */
+        main { flex-grow: 1; padding: 10px 20px; overflow: hidden; background-color: var(--bg-chumbo); display: flex; flex-direction: column; } 
         h2 { font-family: 'Big Shoulders Display', sans-serif !important; font-size: 2.2rem; color: #fff; margin: 0 0 10px 0; text-transform: uppercase; }
-        .container-prontuario { display: flex; gap: 15px; height: calc(100vh - 80px); }
-        .painel-formulario { flex-grow: 1; height: 100%; display: flex; flex-direction: column; }
-        .tabs-wrapper { display: flex; gap: 5px; margin-bottom: 5px; }
-        .tab-button { background: #2d2d2d; color: #888; border: 1px solid #444; padding: 8px 15px; cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.7rem; border-radius: 4px; }
-        .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .form-card { background: var(--bg-card); padding: 15px; border-radius: 4px; border-top: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-grow: 1; overflow: hidden; }
+        
+        /* CONTAINER DO IFRAME */
+        .iframe-container { width: 100%; flex-grow: 1; background: #141414; border: 1px solid #333; border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
         iframe { width: 100%; height: 100%; border: none; background: transparent; }
-        .painel-lista { width: 230px; background: #111; border: 1px solid #333; border-radius: 4px; display: flex; flex-direction: column; height: 100%; flex-shrink: 0; }
-        .scroll-lista { flex-grow: 1; overflow-y: auto; }
-        .aluno-card { padding: 10px 15px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; font-size: 11px; text-transform: uppercase; color: #bbb; }
-        .aluno-card:hover { background: #222; color: var(--primary); }
-        .aluno-card.selecionado { background: var(--primary); color: #fff; font-weight: bold; }
-        .area-botoes-inferiores { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-bottom: 10px; }
-        .btn-acao { padding: 8px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; font-size: 12px; }
-        .btn-novo { background: #444; color: #fff; transition: 0.3s; }
-        .btn-salvar { background: var(--primary); color: #fff; transition: 0.3s; }
     </style>
 </head>
 <body>
     <nav>
-        <div style="text-align:center; padding-bottom:20px;"><img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 100px;"></div>
-        <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
-        <div class="nav-item" onclick="abrirProntuario(this)">Prontuário do Aluno</div>
+        <div style="text-align:center; padding-bottom:20px;">
+            <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 100px;">
+        </div>
+        <div class="nav-item active" id="btn-prontuario" onclick="navegar('RegistroAlunos', this)">Prontuário do Aluno</div>
+        <div class="nav-item" id="btn-config" onclick="navegar('ConfiguracoesTecnicas', this)">Configurações Técnicas</div>
     </nav>
+
     <main>
-        <section id="secao-registro" class="section-content">
-            <h2>Prontuário do Aluno</h2>
-            
-            <div style="width: 100%; height: calc(100vh - 150px); background: #141414; border: 1px solid #333; border-radius: 8px; overflow: hidden;">
-                
-                <iframe id="framePrincipal" 
-                        src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos"
-                        style="width: 100%; height: 100%; border: none;">
-                </iframe>
+        <h2 id="titulo-pagina">Prontuário do Aluno</h2>
         
-            </div>
-        </section>
+        <div class="iframe-container">
+            <iframe id="framePrincipal" 
+                    src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos">
+            </iframe>
+        </div>
     </main>
+
 <script>
-    const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
-    let todosAlunos = []; 
+    const urlGoogleBase = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
 
-    async function abrirProntuario(element) {
-        showSection('secao-registro', element);
-        if (todosAlunos.length === 0) { await buscarListaAlunos(); }
-    }
-
-    async function buscarListaAlunos() {
-        try {
-            const response = await fetch(`${urlGoogle}?action=listarTodos`);
-            const dadosRaw = await response.json();
-            todosAlunos = dadosRaw.filter(aluno => aluno.Aluno_Nome && aluno.Aluno_Nome.trim() !== "");
-            renderizarLista(todosAlunos);
-        } catch (err) { console.error("Erro ao buscar alunos", err); }
-    }
-
-    function renderizarLista(dados) {
-        const container = document.getElementById('listaAlunos');
-        container.innerHTML = "";
-        
-        dados.forEach(aluno => {
-            const card = document.createElement('div');
-            card.className = "aluno-card";
-            card.innerText = aluno.Aluno_Nome;
-            
-            card.onclick = () => {
-                document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-                card.classList.add('selecionado');
-                
-                console.log("Tentando enviar dados do aluno:", aluno.Aluno_Nome); // MENSAGEM DE TESTE 1
-                
-                const iframe = document.getElementById('framePrincipal');
-                if (iframe && iframe.contentWindow) {
-                    // O '*' garante que a mensagem chegue mesmo em domínios diferentes
-                    iframe.contentWindow.postMessage({ 
-                        tipo: 'PREENCHER_FORMULARIO', 
-                        dados: aluno 
-                    }, '*');
-                } else {
-                    console.error("Iframe 'framePrincipal' não encontrado!");
-                }
-            };
-            container.appendChild(card);
-        });
-    }
-
-    function filtrarLista() {
-        const termo = document.getElementById('inputBusca').value.toUpperCase();
-        const filtrados = todosAlunos.filter(aluno => 
-            (aluno.Aluno_Nome || "").toUpperCase().includes(termo)
-        );
-        renderizarLista(filtrados);
-    }
-
-    function showSection(id, element) {
-        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    // FUNÇÃO PARA NAVEGAR ENTRE PÁGINAS NO IFRAME
+    function navegar(pagina, elemento) {
+        // 1. Atualiza visual do menu
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(element) element.classList.add('active');
+        elemento.classList.add('active');
+
+        // 2. Atualiza o título da página
+        const titulos = {
+            'RegistroAlunos': 'Prontuário do Aluno',
+            'ConfiguracoesTecnicas': 'Configurações Técnicas'
+        };
+        document.getElementById('titulo-pagina').innerText = titulos[pagina] || 'Sistema';
+
+        // 3. Troca o SRC do iframe para carregar a nova página
+        const novaUrl = urlGoogleBase + "?page=" + pagina;
+        document.getElementById('framePrincipal').src = novaUrl;
     }
 
-    function executarSalvar() {
-        document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
-    }
+    // Mantive a lógica de postMessage caso você use a lista lateral de alunos no futuro dentro do index
+    window.addEventListener('message', function(event) {
+        if (event.data.tipo === 'SOLICITAR_SALVAR') {
+            document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
+        }
+    });
 </script>
 </body>
 </html>
