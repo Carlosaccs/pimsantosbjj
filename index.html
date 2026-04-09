@@ -15,7 +15,6 @@
             --bg-active: #3d3d3d; 
             --text-light: #e0e0e0; 
             --sidebar-width: 260px; 
-            --vermelho-viva: #b30000;
         }
 
         * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
@@ -38,38 +37,31 @@
 
         h2 { 
             font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: 2.5rem; color: #fff; 
-            margin-top: 0 !important; margin-bottom: 10px; 
-            text-transform: uppercase; 
+            font-size: 2.5rem; color: #fff; margin-top: 0; margin-bottom: 10px; text-transform: uppercase; 
         }
 
-        /* LAYOUT DUAS COLUNAS */
-        .container-prontuario { display: flex; gap: 20px; height: calc(100vh - 100px); align-items: flex-start; }
+        /* LAYOUT PRINCIPAL: FORMULÁRIO À ESQUERDA, LISTA À DIREITA */
+        .container-prontuario { display: flex; gap: 20px; height: calc(100vh - 100px); }
 
-        /* LISTA LATERAL (DIREITA DO MENU) */
+        /* ÁREA DO FORMULÁRIO (OCUPA O CENTRO) */
+        .painel-formulario { flex-grow: 1; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+
+        /* LISTA LATERAL (DIREITA DA TELA) */
         .painel-lista { 
-            width: 280px; background: #111; border: 1px solid #333; 
-            border-radius: 4px; display: flex; flex-direction: column; height: 100%;
+            width: 250px; background: #111; border: 1px solid #333; 
+            border-radius: 4px; display: flex; flex-direction: column; height: 100%; flex-shrink: 0;
         }
-        .busca-lista { padding: 10px; border-bottom: 1px solid #333; }
-        .busca-lista input { 
-            width: 100%; background: #000; color: #fff; border: 1px solid var(--primary); 
-            padding: 8px; border-radius: 4px; font-size: 13px; outline: none;
-        }
-        .scroll-lista { flex-grow: 1; overflow-y: auto; }
+        .scroll-lista { flex-grow: 1; overflow-y: auto; padding: 5px 0; }
         .aluno-card { 
-            padding: 12px 15px; border-bottom: 1px solid #222; cursor: pointer; 
-            transition: 0.2s; font-size: 13px; text-transform: uppercase; color: #bbb;
+            padding: 10px 15px; border-bottom: 1px solid #222; cursor: pointer; 
+            transition: 0.2s; font-size: 12px; text-transform: uppercase; color: #bbb;
         }
         .aluno-card:hover { background: #222; color: var(--primary); }
         .aluno-card.selecionado { background: var(--primary); color: #fff; font-weight: bold; }
 
-        /* ÁREA DO FORMULÁRIO */
-        .painel-formulario { flex-grow: 1; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
-
         .tab-button {
             background: #2d2d2d; color: #888; border: 1px solid #444; padding: 10px 18px;
-            cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.75rem; border-radius: 4px; transition: 0.3s;
+            cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.75rem; border-radius: 4px;
         }
         .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
 
@@ -106,15 +98,6 @@
             <h2>Prontuário do Aluno</h2>
             
             <div class="container-prontuario">
-                <div class="painel-lista">
-                    <div class="busca-lista">
-                        <input type="text" id="inputFiltro" placeholder="Filtrar por nome..." oninput="filtrarLista()">
-                    </div>
-                    <div id="listaAlunos" class="scroll-lista">
-                        <div style="padding:20px; color:#666; font-size:12px;">Carregando lista...</div>
-                    </div>
-                </div>
-
                 <div class="painel-formulario">
                     <div style="display: flex; gap: 10px; margin-bottom: 5px;">
                         <div class="tab-button active">CADASTRO</div>
@@ -124,6 +107,13 @@
                         <div id="container-iframe">
                             <iframe id="framePrincipal" src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos"></iframe>
                         </div>
+                    </div>
+                </div>
+
+                <div class="painel-lista">
+                    <div style="padding: 10px; background: #222; font-size: 11px; font-weight: bold; color: var(--primary); text-align: center; border-bottom: 1px solid #333;">LISTA DE ALUNOS</div>
+                    <div id="listaAlunos" class="scroll-lista">
+                        <div style="padding:20px; color:#666; font-size:12px; text-align:center;">Carregando...</div>
                     </div>
                 </div>
             </div>
@@ -154,14 +144,13 @@
                 todosAlunos = await response.json();
                 renderizarLista(todosAlunos);
             } catch (err) {
-                document.getElementById('listaAlunos').innerHTML = "<div style='padding:20px; color:red;'>Erro ao carregar lista.</div>";
+                document.getElementById('listaAlunos').innerHTML = "<div style='padding:20px; color:red;'>Erro de conexão.</div>";
             }
         }
 
         function renderizarLista(dados) {
             const container = document.getElementById('listaAlunos');
             container.innerHTML = "";
-            
             dados.forEach(aluno => {
                 const card = document.createElement('div');
                 card.className = "aluno-card";
@@ -181,16 +170,10 @@
             }
         }
 
-        function filtrarLista() {
-            const termo = document.getElementById('inputFiltro').value.toUpperCase();
-            const filtrados = todosAlunos.filter(a => a.Aluno_Nome.includes(termo));
-            renderizarLista(filtrados);
-        }
-
         function limparParaNovo() {
             document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
             const iframe = document.getElementById('framePrincipal');
-            iframe.src = iframe.src; // Recarrega o iframe para limpar
+            iframe.src = iframe.src; 
         }
     </script>
 </body>
