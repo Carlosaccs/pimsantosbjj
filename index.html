@@ -129,6 +129,20 @@
             });
         }
 
+        function filtrarLista() {
+            // 1. Pega o que o usuário digitou e transforma em MAIÚSCULO
+            const termo = document.getElementById('inputBusca').value.toUpperCase();
+            
+            // 2. Filtra a lista original (todosAlunos) baseada no nome
+            const filtrados = todosAlunos.filter(aluno => {
+                const nome = aluno.Aluno_Nome ? aluno.Aluno_Nome.toUpperCase() : "";
+                return nome.includes(termo);
+            });
+            
+            // 3. Manda desenhar apenas os alunos que passaram no filtro
+            renderizarLista(filtrados);
+        }
+
         function limparParaNovo() {
             document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
             const iframe = document.getElementById('framePrincipal');
