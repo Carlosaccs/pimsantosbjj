@@ -99,31 +99,32 @@
     }
 
     // FUNÇÃO QUE CRIA A LISTA VISUAL
-    function renderizarLista(dados) {
-        const container = document.getElementById('listaAlunos');
-        container.innerHTML = "";
-        
-        dados.forEach(aluno => {
-            const card = document.createElement('div');
-            card.className = "aluno-card";
-            card.innerText = aluno.Aluno_Nome;
-            
-            card.onclick = () => {
-                document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-                card.classList.add('selecionado');
+            function renderizarLista(dados) {
+                const container = document.getElementById('listaAlunos');
+                container.innerHTML = "";
                 
-                // MANDA OS DADOS PARA O FORMULÁRIO
-                const iframe = document.getElementById('framePrincipal');
-                if (iframe && iframe.contentWindow) {
-                    iframe.contentWindow.postMessage({ 
-                        tipo: 'PREENCHER_FORMULARIO', 
-                        dados: aluno 
-                    }, '*');
-                }
-            };
-            container.appendChild(card);
-        });
-    }
+                dados.forEach(aluno => {
+                    const card = document.createElement('div');
+                    card.className = "aluno-card";
+                    card.innerText = aluno.Aluno_Nome; // Mostra o nome na lista
+                    
+                    card.onclick = () => {
+                        // Seleção visual
+                        document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+                        card.classList.add('selecionado');
+                        
+                        // O segredo está aqui: enviar para o iframe correto
+                        const iframe = document.getElementById('framePrincipal');
+                        if (iframe && iframe.contentWindow) {
+                            iframe.contentWindow.postMessage({ 
+                                tipo: 'PREENCHER_FORMULARIO', 
+                                dados: aluno 
+                            }, '*');
+                        }
+                    };
+                    container.appendChild(card);
+                });
+            }
 
     // FUNÇÃO DE FILTRO (BUSCA)
     function filtrarLista() {
