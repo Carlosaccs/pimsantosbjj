@@ -75,14 +75,7 @@
     </main>
 <script>
     const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
-    let todosAlunos = [];
-
-    function showSection(id, element) {
-        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(element) element.classList.add('active');
-    }
+    let todosAlunos = []; 
 
     async function abrirProntuario(element) {
         showSection('secao-registro', element);
@@ -98,35 +91,36 @@
         } catch (err) { console.error("Erro ao buscar alunos", err); }
     }
 
-    // FUNÇÃO QUE CRIA A LISTA VISUAL
-            function renderizarLista(dados) {
-                const container = document.getElementById('listaAlunos');
-                container.innerHTML = "";
+    function renderizarLista(dados) {
+        const container = document.getElementById('listaAlunos');
+        container.innerHTML = "";
+        
+        dados.forEach(aluno => {
+            const card = document.createElement('div');
+            card.className = "aluno-card";
+            card.innerText = aluno.Aluno_Nome;
+            
+            card.onclick = () => {
+                document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+                card.classList.add('selecionado');
                 
-                dados.forEach(aluno => {
-                    const card = document.createElement('div');
-                    card.className = "aluno-card";
-                    card.innerText = aluno.Aluno_Nome; // Mostra o nome na lista
-                    
-                    card.onclick = () => {
-                        // Seleção visual
-                        document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-                        card.classList.add('selecionado');
-                        
-                        // O segredo está aqui: enviar para o iframe correto
-                        const iframe = document.getElementById('framePrincipal');
-                        if (iframe && iframe.contentWindow) {
-                            iframe.contentWindow.postMessage({ 
-                                tipo: 'PREENCHER_FORMULARIO', 
-                                dados: aluno 
-                            }, '*');
-                        }
-                    };
-                    container.appendChild(card);
-                });
-            }
+                console.log("Tentando enviar dados do aluno:", aluno.Aluno_Nome); // MENSAGEM DE TESTE 1
+                
+                const iframe = document.getElementById('framePrincipal');
+                if (iframe && iframe.contentWindow) {
+                    // O '*' garante que a mensagem chegue mesmo em domínios diferentes
+                    iframe.contentWindow.postMessage({ 
+                        tipo: 'PREENCHER_FORMULARIO', 
+                        dados: aluno 
+                    }, '*');
+                } else {
+                    console.error("Iframe 'framePrincipal' não encontrado!");
+                }
+            };
+            container.appendChild(card);
+        });
+    }
 
-    // FUNÇÃO DE FILTRO (BUSCA)
     function filtrarLista() {
         const termo = document.getElementById('inputBusca').value.toUpperCase();
         const filtrados = todosAlunos.filter(aluno => 
@@ -135,10 +129,11 @@
         renderizarLista(filtrados);
     }
 
-    function limparParaNovo() {
-        document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-        const iframe = document.getElementById('framePrincipal');
-        iframe.src = iframe.src; 
+    function showSection(id, element) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(element) element.classList.add('active');
     }
 
     function executarSalvar() {
