@@ -91,21 +91,32 @@
             } catch (err) { console.error("Erro ao buscar alunos", err); }
         }
 
-        function renderizarLista(dados) {
-            const container = document.getElementById('listaAlunos');
-            container.innerHTML = "";
-            dados.forEach(aluno => {
-                const card = document.createElement('div');
-                card.className = "aluno-card";
-                card.innerText = aluno.Aluno_Nome;
-                card.onclick = () => {
-                    document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-                    card.classList.add('selecionado');
-                    document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'PREENCHER_FORMULARIO', dados: aluno }, '*');
-                };
-                container.appendChild(card);
-            });
-        }
+function renderizarLista(dados) {
+    const container = document.getElementById('listaAlunos');
+    container.innerHTML = "";
+    
+    dados.forEach(aluno => {
+        const card = document.createElement('div');
+        card.className = "aluno-card";
+        card.innerText = aluno.Aluno_Nome;
+        
+        card.onclick = () => {
+            // 1. Estilo visual de seleção
+            document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+            card.classList.add('selecionado');
+            
+            // 2. ENVIO DO COMANDO PARA O IFRAME
+            const iframe = document.getElementById('framePrincipal');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ 
+                    tipo: 'PREENCHER_FORMULARIO', 
+                    dados: aluno 
+                }, '*');
+            }
+        };
+        container.appendChild(card);
+    });
+}
 
         function limparParaNovo() {
             document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
