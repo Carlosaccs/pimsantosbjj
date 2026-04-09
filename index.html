@@ -44,32 +44,14 @@
     <main>
         <section id="secao-registro" class="section-content">
             <h2>Prontuário do Aluno</h2>
-            <div class="container-prontuario">
-                <div class="painel-formulario">
-                    <div class="tabs-wrapper">
-                        <button class="tab-button active">CADASTRO</button>
-                        <button class="tab-button">PRESENÇA</button>
-                        <button class="tab-button">NÍVEL/FAIXA</button>
-                    </div>
-                    <div class="form-card">
-                        <iframe id="framePrincipal" src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos"></iframe>
-                    </div>
-                    <div class="area-botoes-inferiores">
-                        <button class="btn-acao btn-novo" onclick="limparParaNovo()">NOVO</button>
-                        <button class="btn-acao btn-salvar" onclick="executarSalvar()">SALVAR</button>
-                    </div>
-                </div>
+            
+            <div style="width: 100%; height: calc(100vh - 150px); background: #141414; border: 1px solid #333; border-radius: 8px; overflow: hidden;">
                 
-                <div class="painel-lista">
-                    <div style="padding: 10px; background: #222; font-size: 10px; font-weight: bold; color: var(--primary); text-align: center; border-bottom: 1px solid #333;">LISTA DE ALUNOS</div>
-                    <div style="padding: 8px; border-bottom: 1px solid #333;">
-                        <input type="text" id="inputBusca" placeholder="Filtrar por nome..." 
-                               style="width: 100%; background: #000; border: 1px solid var(--primary); color: #fff; padding: 6px; font-size: 11px; outline: none; text-transform: uppercase;"
-                               onkeyup="filtrarLista()">
-                    </div>
-                    <div id="listaAlunos" class="scroll-lista"></div>
-                </div>
-                
+                <iframe id="framePrincipal" 
+                        src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos"
+                        style="width: 100%; height: 100%; border: none;">
+                </iframe>
+        
             </div>
         </section>
     </main>
