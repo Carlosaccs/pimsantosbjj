@@ -6,117 +6,59 @@
     <title>Pim Santos BJJ | Gestão</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Big+Shoulders+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #b8860b; 
-            --bg-chumbo: #1a1a1a;
-            --bg-sidebar: #1a1a1a;
-            --bg-card: #111111; 
-            --bg-hover: #2d2d2d; 
-            --bg-active: #3d3d3d; 
-            --text-light: #e0e0e0; 
-            --sidebar-width: 260px; 
-        }
-
+        :root { --primary: #b8860b; --bg-chumbo: #1a1a1a; --bg-sidebar: #1a1a1a; --bg-card: #111111; --bg-hover: #2d2d2d; --bg-active: #3d3d3d; --text-light: #e0e0e0; --sidebar-width: 260px; }
         * { font-family: 'Roboto', sans-serif !important; box-sizing: border-box; }
         body { background-color: var(--bg-chumbo); color: var(--text-light); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        nav { 
-            width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 2px solid var(--primary); 
-            display: flex; flex-direction: column; padding: 10px 0; flex-shrink: 0; overflow-y: auto;
-        }
-
+        nav { width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 2px solid var(--primary); display: flex; flex-direction: column; padding: 10px 0; flex-shrink: 0; overflow-y: auto; }
         .nav-item { padding: 12px 25px; cursor: pointer; text-transform: uppercase; font-weight: 700; font-size: 0.85rem; border-left: 5px solid transparent; color: #888; transition: 0.3s; }
         .nav-item:hover { color: #fff; background: var(--bg-hover); }
         .nav-item.active { background: var(--bg-active); color: #fff; border-left-color: var(--primary); }
-        
         main { flex-grow: 1; padding: 10px 20px; overflow-y: auto; background-color: var(--bg-chumbo); } 
-        
         .section-content { display: none; height: 100%; }
         .section-content.active { display: block; }
-
-        h2 { 
-            font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: 2.2rem; color: #fff; margin: 0 0 10px 0; text-transform: uppercase; 
-        }
-
+        h2 { font-family: 'Big Shoulders Display', sans-serif !important; font-size: 2.2rem; color: #fff; margin: 0 0 10px 0; text-transform: uppercase; }
         .container-prontuario { display: flex; gap: 15px; height: calc(100vh - 80px); }
-
         .painel-formulario { flex-grow: 1; height: 100%; display: flex; flex-direction: column; }
-
         .tabs-wrapper { display: flex; gap: 5px; margin-bottom: 5px; }
-        .tab-button {
-            background: #2d2d2d; color: #888; border: 1px solid #444; padding: 8px 15px;
-            cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.7rem; border-radius: 4px;
-        }
+        .tab-button { background: #2d2d2d; color: #888; border: 1px solid #444; padding: 8px 15px; cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 0.7rem; border-radius: 4px; }
         .tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .form-card { 
-            background: var(--bg-card); padding: 15px; border-radius: 4px; 
-            border-top: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            flex-grow: 1; overflow: hidden;
-        }
-        
+        .form-card { background: var(--bg-card); padding: 15px; border-radius: 4px; border-top: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-grow: 1; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; background: transparent; }
-
-        .painel-lista { 
-            width: 230px; background: #111; border: 1px solid #333; 
-            border-radius: 4px; display: flex; flex-direction: column; height: 100%; flex-shrink: 0;
-        }
+        .painel-lista { width: 230px; background: #111; border: 1px solid #333; border-radius: 4px; display: flex; flex-direction: column; height: 100%; flex-shrink: 0; }
         .scroll-lista { flex-grow: 1; overflow-y: auto; }
-        .aluno-card { 
-            padding: 10px 15px; border-bottom: 1px solid #222; cursor: pointer; 
-            transition: 0.2s; font-size: 11px; text-transform: uppercase; color: #bbb;
-        }
+        .aluno-card { padding: 10px 15px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; font-size: 11px; text-transform: uppercase; color: #bbb; }
         .aluno-card:hover { background: #222; color: var(--primary); }
         .aluno-card.selecionado { background: var(--primary); color: #fff; font-weight: bold; }
-
-        .area-botoes-inferiores {
-            display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-bottom: 10px;
-        }
-        .btn-acao {
-            padding: 8px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; font-size: 12px;
-        }
+        .area-botoes-inferiores { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-bottom: 10px; }
+        .btn-acao { padding: 8px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; font-size: 12px; }
         .btn-novo { background: #444; color: #fff; transition: 0.3s; }
-        .btn-novo:hover { background: #555; }
         .btn-salvar { background: var(--primary); color: #fff; transition: 0.3s; }
-        .btn-salvar:hover { background: #966e09; }
     </style>
 </head>
 <body>
-
     <nav>
-        <div style="text-align:center; padding-bottom:20px;">
-            <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 100px; height: auto;">
-        </div>
+        <div style="text-align:center; padding-bottom:20px;"><img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 100px;"></div>
         <div class="nav-item active" onclick="showSection('dashboard', this)">Painel de Controle</div>
         <div class="nav-item" onclick="abrirProntuario(this)">Prontuário do Aluno</div>
-        <div class="nav-item" onclick="showSection('dashboard', this)">Professores</div>
     </nav>
-
     <main>
         <section id="secao-registro" class="section-content">
             <h2>Prontuário do Aluno</h2>
-            
             <div class="container-prontuario">
                 <div class="painel-formulario">
                     <div class="tabs-wrapper">
                         <button class="tab-button active">CADASTRO</button>
                         <button class="tab-button">PRESENÇA</button>
                         <button class="tab-button">NÍVEL/FAIXA</button>
-                        <button class="tab-button">EVOLUÇÃO</button>
-                        <button class="tab-button">SAÚDE</button>
                     </div>
-
                     <div class="form-card">
                         <iframe id="framePrincipal" src="https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec?page=RegistroAlunos"></iframe>
                     </div>
-
                     <div class="area-botoes-inferiores">
                         <button class="btn-acao btn-novo" onclick="limparParaNovo()">NOVO</button>
                         <button class="btn-acao btn-salvar" onclick="executarSalvar()">SALVAR</button>
                     </div>
                 </div>
-
                 <div class="painel-lista">
                     <div style="padding: 10px; background: #222; font-size: 10px; font-weight: bold; color: var(--primary); text-align: center; border-bottom: 1px solid #333;">LISTA DE ALUNOS</div>
                     <div id="listaAlunos" class="scroll-lista"></div>
@@ -124,7 +66,6 @@
             </div>
         </section>
     </main>
-
     <script>
         const urlGoogle = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
         let todosAlunos = [];
@@ -138,21 +79,16 @@
 
         async function abrirProntuario(element) {
             showSection('secao-registro', element);
-            if (todosAlunos.length === 0) {
-                await buscarListaAlunos();
-            }
+            if (todosAlunos.length === 0) { await buscarListaAlunos(); }
         }
 
         async function buscarListaAlunos() {
             try {
                 const response = await fetch(`${urlGoogle}?action=listarTodos`);
                 const dadosRaw = await response.json();
-                // Filtra nomes vazios para limpar a lista da direita
                 todosAlunos = dadosRaw.filter(aluno => aluno.Aluno_Nome && aluno.Aluno_Nome.trim() !== "");
                 renderizarLista(todosAlunos);
-            } catch (err) {
-                document.getElementById('listaAlunos').innerHTML = "<div style='padding:20px; color:red;'>Erro de conexão.</div>";
-            }
+            } catch (err) { console.error("Erro ao buscar alunos", err); }
         }
 
         function renderizarLista(dados) {
@@ -162,20 +98,13 @@
                 const card = document.createElement('div');
                 card.className = "aluno-card";
                 card.innerText = aluno.Aluno_Nome;
-                card.onclick = () => selecionarAluno(aluno, card);
+                card.onclick = () => {
+                    document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
+                    card.classList.add('selecionado');
+                    document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'PREENCHER_FORMULARIO', dados: aluno }, '*');
+                };
                 container.appendChild(card);
             });
-        }
-
-        function selecionarAluno(aluno, elemento) {
-            document.querySelectorAll('.aluno-card').forEach(c => c.classList.remove('selecionado'));
-            elemento.classList.add('selecionado');
-            
-            const iframe = document.getElementById('framePrincipal');
-            if (iframe && iframe.contentWindow) {
-                // Envia os dados para o formulário RegistroAlunos.html preencher
-                iframe.contentWindow.postMessage({ tipo: 'PREENCHER_FORMULARIO', dados: aluno }, '*');
-            }
         }
 
         function limparParaNovo() {
@@ -185,18 +114,8 @@
         }
 
         function executarSalvar() {
-            const iframe = document.getElementById('framePrincipal');
-            if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
-            }
+            document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
         }
-        
-        // Carrega a lista automaticamente ao abrir a página
-        window.onload = () => {
-            if(document.getElementById('secao-registro').classList.contains('active')) {
-                buscarListaAlunos();
-            }
-        };
     </script>
 </body>
 </html>
