@@ -59,10 +59,17 @@
                         <button class="btn-acao btn-salvar" onclick="executarSalvar()">SALVAR</button>
                     </div>
                 </div>
+                
                 <div class="painel-lista">
                     <div style="padding: 10px; background: #222; font-size: 10px; font-weight: bold; color: var(--primary); text-align: center; border-bottom: 1px solid #333;">LISTA DE ALUNOS</div>
+                    <div style="padding: 8px; border-bottom: 1px solid #333;">
+                        <input type="text" id="inputBusca" placeholder="Filtrar por nome..." 
+                               style="width: 100%; background: #000; border: 1px solid var(--primary); color: #fff; padding: 6px; font-size: 11px; outline: none; text-transform: uppercase;"
+                               onkeyup="filtrarLista()">
+                    </div>
                     <div id="listaAlunos" class="scroll-lista"></div>
                 </div>
+                
             </div>
         </section>
     </main>
