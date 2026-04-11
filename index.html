@@ -32,7 +32,7 @@
         </div>
         <div class="nav-item active" id="btn-prontuario" onclick="navegar('RegistroAlunos', this)">Prontuário do Aluno</div>
         
-        <div class="nav-item" id="btn-professores" onclick="navegar('CadastroProfessores', this)">Cadastro de Professores</div>
+        <div class="nav-item" id="btn-professores" onclick="navegar('RegistroProfessores', this)">Cadastro de Professores</div>
         
         <div class="nav-item" id="btn-config" onclick="navegar('ConfiguracoesTecnicas', this)">Configurações Técnicas</div>
     </nav>
@@ -50,21 +50,17 @@
 <script>
     const urlGoogleBase = "https://script.google.com/macros/s/AKfycbwjgLILyqXtedSQlzz_XMedMRw9armgAQs1mGDUJ0L_SVKAweZ-53YZBgWktgutDDMm/exec";
 
-    // FUNÇÃO PARA NAVEGAR ENTRE PÁGINAS NO IFRAME
     function navegar(pagina, elemento) {
-        // 1. Atualiza visual do menu
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         elemento.classList.add('active');
 
-        // 2. Atualiza o título da página (Adicionei o título de Professores aqui)
         const titulos = {
             'RegistroAlunos': 'Prontuário do Aluno',
-            'CadastroProfessores': 'Cadastro de Professores',
+            'RegistroProfessores': 'Cadastro de Professores',
             'ConfiguracoesTecnicas': 'Configurações Técnicas'
         };
         document.getElementById('titulo-pagina').innerText = titulos[pagina] || 'Sistema';
 
-        // 3. Troca o SRC do iframe para carregar a nova página
         const novaUrl = urlGoogleBase + "?page=" + pagina;
         document.getElementById('framePrincipal').src = novaUrl;
     }
