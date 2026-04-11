@@ -31,6 +31,9 @@
             <img src="https://carlosaccs.github.io/pimsantosbjj/Logomenor.png" style="width: 100px;">
         </div>
         <div class="nav-item active" id="btn-prontuario" onclick="navegar('RegistroAlunos', this)">Prontuário do Aluno</div>
+        
+        <div class="nav-item" id="btn-professores" onclick="navegar('CadastroProfessores', this)">Cadastro de Professores</div>
+        
         <div class="nav-item" id="btn-config" onclick="navegar('ConfiguracoesTecnicas', this)">Configurações Técnicas</div>
     </nav>
 
@@ -53,9 +56,10 @@
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         elemento.classList.add('active');
 
-        // 2. Atualiza o título da página
+        // 2. Atualiza o título da página (Adicionei o título de Professores aqui)
         const titulos = {
             'RegistroAlunos': 'Prontuário do Aluno',
+            'CadastroProfessores': 'Cadastro de Professores',
             'ConfiguracoesTecnicas': 'Configurações Técnicas'
         };
         document.getElementById('titulo-pagina').innerText = titulos[pagina] || 'Sistema';
@@ -65,7 +69,6 @@
         document.getElementById('framePrincipal').src = novaUrl;
     }
 
-    // Mantive a lógica de postMessage caso você use a lista lateral de alunos no futuro dentro do index
     window.addEventListener('message', function(event) {
         if (event.data.tipo === 'SOLICITAR_SALVAR') {
             document.getElementById('framePrincipal').contentWindow.postMessage({ tipo: 'EXECUTAR_SALVAR' }, '*');
